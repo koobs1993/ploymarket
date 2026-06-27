@@ -1,23 +1,18 @@
 import { useWorldCup } from "../hooks/useWorldCupData";
 import type { WorldCupOutcome } from "../types";
-import { formatCurrency, formatPercent } from "../utils/format";
+import { getCountryCode } from "../utils/countryCodes";
+import { formatPercent } from "../utils/format";
 import { TrendChart } from "./TrendChart";
 
-function formatMultiplier(price: number): string {
-  return `${(1 / price).toFixed(2)}x`;
-}
-
-function HeroTeamRow({ outcome }: { outcome: WorldCupOutcome }) {
+function TopPick({ outcome }: { outcome: WorldCupOutcome }) {
   return (
-    <div className="wc-hero-team">
-      <img className="wc-hero-team__icon" src={outcome.icon} alt="" />
-      <div className="wc-hero-team__info">
-        <span className="wc-hero-team__name">{outcome.title}</span>
-        <span className="wc-hero-team__multiplier">
-          {formatMultiplier(outcome.price)}
-        </span>
+    <div className="top-pick">
+      <img className="top-pick__flag" src={outcome.icon} alt="" />
+      <div className="top-pick__info">
+        <span className="top-pick__code">{getCountryCode(outcome.title)}</span>
+        <span className="top-pick__name">{outcome.title}</span>
       </div>
-      <span className="wc-hero-team__odds">{formatPercent(outcome.odds)}</span>
+      <span className="top-pick__odds">{formatPercent(outcome.odds, 1)}</span>
     </div>
   );
 }
@@ -52,38 +47,11 @@ export function WorldCupHero({ compact = false }: WorldCupHeroProps) {
 
   if (!data) return null;
 
-  const featured = data.outcomes.slice(0, compact ? 2 : 2);
-  const remaining = Math.max(data.outcomes.length - featured.length, 0);
+  const topPicks = data.outcomes.slice(0, 2);
 
   return (
     <section className={`wc-hero ${compact ? "wc-hero--compact" : ""}`}>
       <div className="wc-hero__inner">
-        {!compact && (
-          <div className="wc-hero__sidebar">
-            <div className="wc-hero__teams">
-              {featured.map((outcome) => (
-                <HeroTeamRow key={outcome.id} outcome={outcome} />
-              ))}
-            </div>
-
-            <div className="wc-hero__volume">
-              <span className="wc-hero__volume-value">
-                {formatCurrency(data.volume)}
-              </span>
-              <span className="wc-hero__volume-label">vol</span>
-            </div>
-
-            {remaining > 0 && <p className="wc-hero__more">{remaining} more</p>}
-
-            {data.description && (
-              <div className="wc-hero__news">
-                <span className="wc-hero__news-label">News</span>
-                <p className="wc-hero__news-text">{data.description}</p>
-              </div>
-            )}
-          </div>
-        )}
-
         <div className="wc-hero__chart-wrap">
           <TrendChart
             series={trends}
@@ -94,6 +62,14 @@ export function WorldCupHero({ compact = false }: WorldCupHeroProps) {
             compact={compact}
           />
         </div>
+
+        {compact && topPicks.length > 0 && (
+          <div className="top-picks">
+            {topPicks.map((outcome) => (
+              <TopPick key={outcome.id} outcome={outcome} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

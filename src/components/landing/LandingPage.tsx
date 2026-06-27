@@ -1,15 +1,14 @@
 import { JoinButton } from "./JoinButton";
 import { Countdown } from "./Countdown";
-import { Marquee } from "./Marquee";
 import { WorldCupHero } from "../WorldCupHero";
 import { WorldCupPanel } from "../WorldCupPanel";
+import { Ticker } from "../Ticker";
 import {
   BRAND_NAME,
   EVENT_NAME,
   TOURNAMENT_START,
   brandPoints,
   faqs,
-  featurePills,
   heroStats,
   howItWorks,
   navLinks,
@@ -103,23 +102,16 @@ export function LandingPage() {
 
             <div className="landing-hero__actions">
               <JoinButton size="lg" />
-              <p className="landing-hero__trust">
-                Trusted by Kane, Rips, Rake and 50k other traders
-              </p>
             </div>
           </div>
 
           <div className="landing-hero__visual">
-            <div className="visual-card">
-              <div className="visual-card__shine" aria-hidden="true" />
-              <div className="visual-card__badge">Live odds</div>
-              <WorldCupHero compact />
-            </div>
+            <WorldCupHero compact />
           </div>
         </div>
       </section>
 
-      <Marquee items={featurePills} className="marquee--accent" />
+      <Ticker />
 
       <section className="landing-section landing-section--live" id="markets">
         <div className="container">

@@ -294,51 +294,8 @@
   gap: 14px;
 }
 
-.landing-hero__trust {
-  margin: 0;
-  font-size: 13px;
-  color: #737373;
-}
-
 .landing-hero__visual {
   min-width: 0;
-}
-
-.visual-card {
-  position: relative;
-  padding: 14px;
-  border: 1px solid var(--landing-border-strong);
-  border-radius: 22px;
-  overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(255, 193, 69, 0.06), rgba(255, 255, 255, 0.02)),
-    #080808;
-  box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-.visual-card__shine {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255, 193, 69, 0.08), transparent 40%);
-  pointer-events: none;
-}
-
-.visual-card__badge {
-  position: absolute;
-  top: 18px;
-  left: 18px;
-  z-index: 2;
-  padding: 6px 12px;
-  border: 1px solid rgba(255, 193, 69, 0.25);
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.72);
-  color: var(--gold);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 /* CTA button — GFT split style */
@@ -494,6 +451,7 @@
 .live-stack {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 /* Steps */
@@ -1019,7 +977,6 @@
 
   .wc-calculator,
   .wc-card,
-  .visual-card,
   .phase-card,
   .step-card {
     border-radius: 14px;
