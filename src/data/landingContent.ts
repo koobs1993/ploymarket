@@ -2,20 +2,9 @@ export const TOURNAMENT_START = new Date("2026-06-28T12:00:00-04:00");
 
 export const BRAND_NAME = "GoatFunded";
 export const EVENT_NAME = "GoatFunded World Cup";
+export const SIGNUP_URL = "#join";
 
-export const heroStats = [
-  { value: "$10K", label: "Cash Prizes" },
-  { value: "$1M", label: "In Funding" },
-  { value: "Top 50", label: "Winners" },
-];
-
-export const featurePills = [
-  "$10K cash prizes",
-  "$1M in funding",
-  "$2,000 virtual capital",
-  "Top 50 win",
-  "Free entry",
-];
+export const heroBenefits = ["No risk", "No payment"];
 
 export const prizeHeadline = {
   cash: "$10K CASH",
@@ -23,102 +12,95 @@ export const prizeHeadline = {
   tagline: "UP FOR GRABS",
 };
 
-export const topTenPrizes = [
-  { place: "1", cash: "$5,000", fundedAccount: "$100,000" },
-  { place: "2", cash: "$1,500", fundedAccount: "$100,000" },
-  { place: "3", cash: "$1,000", fundedAccount: "$100,000" },
-  { place: "4", cash: "$700", fundedAccount: "$100,000" },
-  { place: "5", cash: "$500", fundedAccount: "$100,000" },
-  { place: "6", cash: "$400", fundedAccount: "$50,000" },
-  { place: "7", cash: "$300", fundedAccount: "$50,000" },
-  { place: "8", cash: "$250", fundedAccount: "$50,000" },
-  { place: "9", cash: "$200", fundedAccount: "$50,000" },
-  { place: "10", cash: "$150", fundedAccount: "$50,000" },
+export const podiumPrizes = [
+  {
+    place: "2",
+    rank: "2nd Place",
+    cash: "$1,500",
+    account: "$100,000 account",
+    tone: "silver" as const,
+  },
+  {
+    place: "1",
+    rank: "1st Place",
+    cash: "$5,000",
+    account: "$100,000 account",
+    tone: "gold" as const,
+    featured: true,
+  },
+  {
+    place: "3",
+    rank: "3rd Place",
+    cash: "$1,000",
+    account: "$100,000 account",
+    tone: "bronze" as const,
+  },
 ];
 
-export const places11to50Prizes = [
-  { places: "11 – 20", prize: "$10,000 account", winners: "10 accounts" },
-  { places: "21 – 50", prize: "$5,000 account", winners: "30 accounts" },
+export const leaderboardPrizes = [
+  { rank: "4th", cash: "$700", account: "$100,000 account" },
+  { rank: "5th", cash: "$500", account: "$100,000 account" },
+  { rank: "6th – 10th", cash: "$150 – $400", account: "$50,000 account" },
+  { rank: "11th – 20th", cash: "—", account: "$10,000 account" },
+  { rank: "21st – 50th", cash: "—", account: "$5,000 account" },
 ];
 
 export const prizeTotals = [
-  { label: "Total cash prizes", value: "$10,000" },
-  { label: "Total funded accounts", value: "$1,000,000" },
-  { label: "Total prize pool", value: "$1,010,000", featured: true },
-  { label: "Total winners", value: "50" },
+  { label: "Total cash", value: "$10,000" },
+  { label: "Total funding", value: "$1,000,000" },
+  { label: "Total pool", value: "$1,010,000", featured: true },
+  { label: "Winners", value: "50" },
 ];
 
 export const howItWorks = [
+  { step: "1", title: "Join FREE" },
+  { step: "2", title: "Get $100,000 Simulated Funding" },
+  { step: "3", title: "Predict & Win" },
+];
+
+export const secondaryMarketSlugs = [
+  "world-cup-golden-glove-winner-20260603195306910",
+  "world-cup-nation-to-reach-final",
+] as const;
+
+export const mediaLogos = [
   {
-    step: "1",
-    title: "Join the tournament (it's free)",
-    body: "Once you're in, you'll be ready to compete when World Cup Knockouts open.",
-    note: "The tournament runs from 28 June - 19 July.",
+    name: "Benzinga",
+    src: "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/692ed6079186810825794947_Brand%20Logo%20Benzinga.svg",
   },
   {
-    step: "2",
-    title: "Get $2,000 simulated funding",
-    body: "Every trader begins with the same $2,000 virtual balance, so the leaderboard comes down to your predictions, timing, and risk management.",
+    name: "Yahoo",
+    src: "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/692ed607848b4e056f0413aa_Brand%20Logo%20Yahoo.svg",
   },
   {
-    step: "3",
-    title: "Predict the World Cup",
-    body: "Place trades on World Cup match outcomes and event contracts. Choose the markets where you think the odds are wrong and make your move.",
+    name: "Nasdaq",
+    src: "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/692ed6075eb327586d0279c7_Brand%20Logo%20Nasdaq.svg",
+  },
+  {
+    name: "MarketWatch",
+    src: "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/692ed607044de3f0b708561f_Brand%20Logo%20Market.svg",
   },
 ];
 
-
-export const phases = [
+export const brandStats = [
   {
-    label: "Phase 1",
-    dates: "28 June - 3 July",
-    title: "Round of 32",
-    description:
-      "Start with $2,000. Every account can be reset one time for free during this phase. No drawdown rules. Hit zero and you are knocked out. Late entry stays open through this round.",
-    stats: [
-      { label: "Starting Balance", value: "$2,000" },
-      { label: "Resets", value: "1 (free)" },
-      { label: "Power Plays", value: "5 total" },
-      { label: "Multipliers", value: "None" },
-    ],
+    title: "$20 MILLION",
+    desc: "Paid in rewards",
+    featured: true,
+    image:
+      "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/692fb68556f4c57cd11f7838_Brand%20Illustration%20Stats%201.webp",
   },
   {
-    label: "Phase 2",
-    dates: "4 - 8 July",
-    title: "Round of 16",
-    description: "Resets close.",
-    stats: [
-      { label: "Resets", value: "None" },
-      { label: "Power Plays", value: "5" },
-      { label: "Multipliers", value: "None" },
-    ],
+    title: "$2,180",
+    desc: "Average Reward",
+    image:
+      "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/692fb684e7b22e8ba06c538f_Brand%20Illustration%20Stats%202.webp",
   },
   {
-    label: "Phase 3",
-    dates: "8 - 19 July",
-    title: "Quarterfinals to Final",
-    description:
-      "New entries close. The stakes climb with round multipliers all the way to the final on July 19.",
-    stats: [
-      { label: "Resets", value: "None" },
-      { label: "Power Plays", value: "5" },
-      { label: "Multipliers", value: "Quarterfinals: 1.25x P&L\nSemifinals: 1.5x P&L\nFinal: 2x Power Mode" },
-    ],
-  },
-];
-
-export const brandPoints = [
-  {
-    title: "Fast, Transparent Payouts",
-    body: "GoatFunded is built around clear payout rules, simple requirements, and reliable reward processing.",
-  },
-  {
-    title: "$250M+ Paid Out",
-    body: "GoatFunded has already paid out more than $250,000,000 to traders worldwide.",
-  },
-  {
-    title: "Trader-First Rules",
-    body: "Clear targets, straightforward limits, and a platform experience designed around active traders.",
+    title: "250,000+",
+    desc: "Traders using GFT Worldwide",
+    image:
+      "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/692fb6857543d624ec45f782_Brand%20Illustration%20Stats%203.webp",
   },
 ];
 
@@ -126,49 +108,29 @@ export const faqs = [
   {
     question: "Is the GoatFunded World Cup free to enter?",
     answer:
-      "Yes. The tournament is free to enter. Every participant starts with $2,000 in virtual capital and competes on World Cup prediction markets for a chance to win from the $1,010,000 prize pool — $10,000 in cash plus $1,000,000 in funded accounts.",
+      "Yes. Entry is completely free. You trade with $100,000 in simulated capital and compete for $10,000 in cash plus $1,000,000 in funded accounts.",
   },
   {
-    question: "What will I be trading?",
+    question: "What can I predict?",
     answer:
-      "You'll trade prediction markets tied only to World Cup matches. That means match outcomes, event contracts, and World Cup-specific opportunities. No futures markets, no unrelated categories, just World Cup predictions.",
+      "World Cup winner, Golden Glove, nations reaching the final, and more. The tournament covers a wide range of World Cup prediction markets.",
   },
   {
     question: "How do I win prizes?",
     answer:
-      "Your leaderboard position is based on total tournament P&L. The higher your P&L, the higher you rank. The top 10 win cash plus funded accounts, places 11–50 win funded accounts, and 50 traders total take home prizes.",
-  },
-  {
-    question: "What are Power Plays?",
-    answer:
-      "Power Plays are limited boosters of up to 2x for your highest-conviction trades. Every trader gets 5 for the entire tournament. Before placing a trade, you can activate a Power Play to boost that trade's P&L impact. The multiplier increases at each stage – 1.25x at the Quarterfinals, 1.5x at the Semifinals, and 2x at the Final. Use them carefully, because once they're gone, they're gone.",
+      "Rankings are based on tournament P&L. Top 10 win cash plus funded accounts. Places 11–50 win funded accounts. Fifty traders total take home prizes.",
   },
   {
     question: "When does the tournament start?",
-    answer:
-      "Registration opens June 18. Full tournament trading begins June 28 when Round of 32.",
+    answer: "Registration is open now. Full tournament trading begins 28 June.",
   },
   {
-    question: "Can I enter after the tournament starts?",
-    answer:
-      "Yes, late entry is allowed during the Round of 32. You can join until the Quarterfinals begin. After that, no new entries are accepted.",
-  },
-  {
-    question: "What happens if my balance hits zero?",
-    answer:
-      "You have one free reset available, which you can use during the Round of 32 only. Once the Round of 32 ends, no further resets are available.",
+    question: "Do I need to pay anything?",
+    answer: "No. There is no entry fee and no payment required to participate.",
   },
   {
     question: "What makes this different from regular betting?",
     answer:
-      "This is a leaderboard-based prediction trading tournament. You're not just placing one-off bets. You're managing virtual capital, trading World Cup markets, using Power Plays, climbing the leaderboard, and competing against other traders and countries for prizes.",
+      "This is a free prediction trading tournament on simulated capital. You're competing on a leaderboard for cash and funded accounts — not placing real-money bets.",
   },
-];
-
-export const navLinks = [
-  { label: "Markets", href: "#markets" },
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Prizes", href: "#prizes" },
-  { label: "Rules", href: "#rules" },
-  { label: "FAQ", href: "#faq" },
 ];

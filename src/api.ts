@@ -83,8 +83,12 @@ async function fetchWithRetry(url: string) {
 }
 
 export async function fetchWorldCupData(): Promise<WorldCupData> {
+  return fetchEventBySlug(WORLD_CUP_EVENT_SLUG);
+}
+
+export async function fetchEventBySlug(slug: string): Promise<WorldCupData> {
   const params = new URLSearchParams({
-    slug: WORLD_CUP_EVENT_SLUG,
+    slug,
     active: "true",
     closed: "false",
   });
@@ -94,7 +98,7 @@ export async function fetchWorldCupData(): Promise<WorldCupData> {
   const events: PolymarketEvent[] = await response.json();
   const event = events[0];
   if (!event) {
-    throw new Error("World Cup market not found");
+    throw new Error("Market not found");
   }
 
   const outcomes = (event.markets ?? [])

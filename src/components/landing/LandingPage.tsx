@@ -1,24 +1,18 @@
 import { JoinButton } from "./JoinButton";
 import { BrandLogo } from "./BrandLogo";
+import { BrandSocialProof } from "./BrandSocialProof";
 import { StickyJoinBar } from "./StickyJoinBar";
-import { Countdown } from "./Countdown";
+import { PrizeLeaderboard } from "./PrizeLeaderboard";
+import { PrizePodium } from "./PrizePodium";
 import { WorldCupHero } from "../WorldCupHero";
-import { WorldCupPanel } from "../WorldCupPanel";
-import { Ticker } from "../Ticker";
+import { WorldCupPredictions } from "../WorldCupPredictions";
 import {
   BRAND_NAME,
   EVENT_NAME,
-  TOURNAMENT_START,
-  brandPoints,
   faqs,
-  heroStats,
+  heroBenefits,
   howItWorks,
-  navLinks,
-  phases,
-  places11to50Prizes,
   prizeHeadline,
-  prizeTotals,
-  topTenPrizes,
 } from "../../data/landingContent";
 
 function SectionHeading({
@@ -44,28 +38,11 @@ function SectionHeading({
 export function LandingPage() {
   return (
     <div className="landing">
-      <div className="promo-bar">
-        <div className="container promo-bar__inner">
-          <span className="promo-bar__tag">Limited time</span>
-          <span>Free entry · $10K cash + $1M funding · Tournament starts 28 June</span>
-        </div>
-      </div>
-
-      <header className="landing-nav">
+      <header className="landing-nav landing-nav--simple">
         <div className="container landing-nav__inner">
           <a className="landing-nav__brand" href="#">
             <BrandLogo className="brand-logo--nav" />
           </a>
-
-          <nav className="landing-nav__links" aria-label="Primary">
-            {navLinks.map((link) => (
-              <a key={link.href} href={link.href} className="landing-nav__link">
-                {link.label}
-              </a>
-            ))}
-          </nav>
-
-          <JoinButton size="md" />
         </div>
       </header>
 
@@ -73,35 +50,27 @@ export function LandingPage() {
         <div className="landing-hero__glow" aria-hidden="true" />
         <div className="container landing-hero__grid">
           <div className="landing-hero__copy">
-            <div className="social-proof">
-              <span>50K+ traders competing</span>
-              <span className="social-proof__divider" />
-              <span className="social-proof__stars">★★★★★</span>
-              <span>4.8 from verified reviews</span>
-            </div>
-
             <p className="landing-hero__eyebrow">{EVENT_NAME}</p>
             <h1 className="landing-hero__title">
-              Predict the World Cup Knockouts.
+              Predict the World Cup.
               <span className="text-accent"> Win cash &amp; funding.</span>
             </h1>
             <p className="landing-hero__desc">
-              Enter free, start with $2,000 in virtual capital, and trade World
-              Cup prediction markets against thousands of other competitors. Top
-              50 traders win cash and funded accounts.
+              Trade with $100,000 in simulated capital
             </p>
-
-            <div className="stat-grid">
-              {heroStats.map((stat) => (
-                <div key={stat.label} className="stat-card">
-                  <span className="stat-card__value">{stat.value}</span>
-                  <span className="stat-card__label">{stat.label}</span>
-                </div>
-              ))}
-            </div>
 
             <div className="landing-hero__actions">
               <JoinButton size="lg" />
+              <ul className="hero-benefits">
+                {heroBenefits.map((item) => (
+                  <li key={item} className="hero-benefits__item">
+                    <span className="hero-benefits__check" aria-hidden="true">
+                      ✓
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
@@ -111,50 +80,20 @@ export function LandingPage() {
         </div>
       </section>
 
-      <Ticker />
-
-      <section className="landing-section landing-section--live" id="markets">
-        <div className="container">
-          <SectionHeading
-            eyebrow="Live markets"
-            title="Latest World Cup predictions"
-            subtitle="Real-time odds from Polymarket. Track favorites, spot mispriced markets, and plan your tournament trades."
-          />
-          <div className="live-stack">
-            <WorldCupPanel />
-          </div>
-        </div>
-      </section>
-
       <section className="landing-section" id="how-it-works">
         <div className="container">
-          <SectionHeading eyebrow="How it works" title="Three steps to compete" />
-          <div className="steps-grid">
+          <SectionHeading
+            eyebrow="How It Works"
+            title="Participating Is This Easy"
+            align="center"
+          />
+          <div className="steps-grid steps-grid--simple">
             {howItWorks.map((step) => (
-              <article key={step.step} className="step-card">
+              <article key={step.step} className="step-card step-card--simple">
                 <span className="step-card__number">{step.step}</span>
                 <h3 className="step-card__title">{step.title}</h3>
-                <p className="step-card__body">{step.body}</p>
-                {step.note && <p className="step-card__note">{step.note}</p>}
               </article>
             ))}
-          </div>
-
-          <div className="power-card">
-            <div className="power-card__icon" aria-hidden="true">
-              ⚡
-            </div>
-            <div>
-              <h3 className="power-card__title">Use Power Plays</h3>
-              <p className="power-card__body">
-                You get 5 Power Plays. Activate one before a trade to double
-                your P&L.
-              </p>
-              <p className="power-card__note">
-                Power Plays add bonus P&L that only affects your ranking, not
-                your available capital.
-              </p>
-            </div>
           </div>
         </div>
       </section>
@@ -172,72 +111,13 @@ export function LandingPage() {
 
           <SectionHeading
             align="center"
-            title="$10K cash and $1M in funded accounts."
-            subtitle="A World Cup prediction tournament built for people who can read the game."
+            eyebrow="Prizes"
+            title="$10K cash. $1M in funding."
+            subtitle="Top 50 traders win cash and funded accounts."
           />
 
-          <div className="prize-table-block">
-            <h3 className="prize-table-block__title">Top 10 — Cash + Funded Account</h3>
-            <div className="prize-table-wrap">
-              <table className="prize-table">
-                <thead>
-                  <tr>
-                    <th scope="col">Place</th>
-                    <th scope="col">Cash Prize</th>
-                    <th scope="col">Funded Account</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {topTenPrizes.map((prize) => (
-                    <tr key={prize.place}>
-                      <td>{prize.place}</td>
-                      <td>{prize.cash}</td>
-                      <td>{prize.fundedAccount}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="prize-table-block">
-            <h3 className="prize-table-block__title">Places 11 – 50 — Funded Account</h3>
-            <div className="prize-table-wrap">
-              <table className="prize-table">
-                <thead>
-                  <tr>
-                    <th scope="col">Places</th>
-                    <th scope="col">Prize</th>
-                    <th scope="col">Winners</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {places11to50Prizes.map((tier) => (
-                    <tr key={tier.places}>
-                      <td>{tier.places}</td>
-                      <td>{tier.prize}</td>
-                      <td>{tier.winners}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="prize-totals">
-            <h3 className="prize-totals__title">Totals</h3>
-            <dl className="prize-totals__grid">
-              {prizeTotals.map((item) => (
-                <div
-                  key={item.label}
-                  className={`prize-total${item.featured ? " prize-total--featured" : ""}`}
-                >
-                  <dt>{item.label}</dt>
-                  <dd>{item.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
+          <PrizePodium />
+          <PrizeLeaderboard />
 
           <div className="section-cta">
             <JoinButton size="lg" />
@@ -245,56 +125,22 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="landing-section" id="rules">
+      <section className="landing-section landing-section--live" id="markets">
         <div className="container">
           <SectionHeading
-            eyebrow="Rules and schedule"
-            title="One global leaderboard, ranked by your P&L on virtual capital."
-            subtitle="It runs alongside the knockout rounds, from the Round of 32 through to the Final."
+            eyebrow="Live markets"
+            title="Trade These World Cup Predictions"
+            subtitle="Real-time Polymarket odds. Pick your markets and compete on the leaderboard."
           />
-
-          <div className="phases-grid">
-            {phases.map((phase) => (
-              <article key={phase.label} className="phase-card">
-                <div className="phase-card__header">
-                  <span className="phase-card__label">{phase.label}</span>
-                  <span className="phase-card__dates">{phase.dates}</span>
-                </div>
-                <h3 className="phase-card__title">{phase.title}</h3>
-                <p className="phase-card__desc">{phase.description}</p>
-                <dl className="phase-card__stats">
-                  {phase.stats.map((stat) => (
-                    <div key={stat.label} className="phase-stat">
-                      <dt>{stat.label}</dt>
-                      <dd>{stat.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </article>
-            ))}
-          </div>
-
-          <div className="section-cta">
-            <JoinButton size="lg" />
+          <div className="live-stack">
+            <WorldCupPredictions />
           </div>
         </div>
       </section>
 
-      <section className="landing-section landing-section--brand">
+      <section className="landing-section landing-section--brand" id="about">
         <div className="container">
-          <SectionHeading
-            align="center"
-            title={`Run by ${BRAND_NAME}, the prop firm that paid out $250,000,000+`}
-            subtitle={`${BRAND_NAME} is trusted by tens of thousands of traders for transparent rules, fast payouts, and trader-first design.`}
-          />
-          <div className="brand-grid">
-            {brandPoints.map((point) => (
-              <article key={point.title} className="brand-card">
-                <h3>{point.title}</h3>
-                <p>{point.body}</p>
-              </article>
-            ))}
-          </div>
+          <BrandSocialProof />
         </div>
       </section>
 
@@ -302,8 +148,8 @@ export function LandingPage() {
         <div className="container container--narrow">
           <SectionHeading
             align="center"
-            eyebrow="FAQs"
-            title="Questions? We've got answers."
+            eyebrow="Questions"
+            title="FAQs"
           />
           <div className="faq-list">
             {faqs.map((faq) => (
@@ -316,33 +162,13 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="landing-final">
-        <div className="landing-final__glow" aria-hidden="true" />
-        <div className="container landing-final__inner">
-          <div className="landing-final__copy">
-            <p className="landing-final__eyebrow">
-              Don't just watch the World Cup. Trade it.
-            </p>
-            <h2 className="landing-final__title">
-              Win up to <span className="text-accent">$5,000 + $100K funding</span>.
-            </h2>
-            <p className="landing-final__desc">
-              Enter free with $2,000 in virtual capital and compete on P&L
-              against traders from around the world.
-            </p>
-          </div>
-          <Countdown target={TOURNAMENT_START} />
-          <JoinButton size="lg" />
-        </div>
-      </section>
-
       <footer className="landing-footer">
         <div className="container landing-footer__inner">
           <div className="landing-footer__brand">
             <BrandLogo className="brand-logo--footer" />
           </div>
           <p>© 2026 {BRAND_NAME}. All rights reserved.</p>
-          <p>World Cup prediction tournament. Free entry. Virtual capital only.</p>
+          <p>World Cup prediction tournament. Free entry. Simulated capital only.</p>
         </div>
       </footer>
 

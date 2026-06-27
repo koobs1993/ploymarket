@@ -473,6 +473,76 @@ body {
   color: #737373;
 }
 
+.predictions-stack {
+  display: grid;
+  gap: 20px;
+}
+
+.predictions-grid {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .predictions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.prediction-card {
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  background: #0a0a0a;
+  overflow: hidden;
+  padding-bottom: 18px;
+}
+
+.prediction-card--compact {
+  padding-bottom: 16px;
+}
+
+.prediction-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 16px 0;
+}
+
+.prediction-card__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #222;
+}
+
+.prediction-card__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.prediction-card__meta {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #737373;
+}
+
+.prediction-card__outcomes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px 0;
+}
+
+.prediction-card__cta.join-btn {
+  width: calc(100% - 32px);
+  max-width: none;
+  margin: 16px 16px 0;
+  justify-content: center;
+}
+
 .wc-panel {
   width: 100%;
   display: flex;
