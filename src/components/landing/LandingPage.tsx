@@ -1,5 +1,6 @@
 import { JoinButton } from "./JoinButton";
 import { BrandLogo } from "./BrandLogo";
+import { StickyJoinBar } from "./StickyJoinBar";
 import { Countdown } from "./Countdown";
 import { WorldCupHero } from "../WorldCupHero";
 import { WorldCupPanel } from "../WorldCupPanel";
@@ -344,6 +345,8 @@ export function LandingPage() {
           <p>World Cup prediction tournament. Free entry. Virtual capital only.</p>
         </div>
       </footer>
+
+      <StickyJoinBar />
     </div>
   );
 }
