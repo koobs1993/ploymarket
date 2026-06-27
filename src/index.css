@@ -637,6 +637,22 @@ body {
   background: #222;
 }
 
+.wc-outcome__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 193, 69, 0.25);
+  color: var(--gold);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
 .wc-outcome__code {
   font-size: 10px;
   font-weight: 800;

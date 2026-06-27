@@ -10,6 +10,27 @@ import { PredictButton } from "./landing/PredictButton";
 const WINNER_LIMIT = 8;
 const COMPACT_LIMIT = 4;
 
+function OutcomeAvatar({ outcome }: { outcome: WorldCupData["outcomes"][number] }) {
+  const initials = outcome.title
+    .replace(/[^a-zA-Z\s]/g, "")
+    .split(/\s+/)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  if (outcome.icon) {
+    return <img className="wc-outcome__flag" src={outcome.icon} alt="" />;
+  }
+
+  return <span className="wc-outcome__avatar">{initials || "?"}</span>;
+}
+
+function outcomeLabel(title: string): string {
+  if (/^Player [A-Z]$/i.test(title.trim())) return title.trim();
+  return getCountryCode(title);
+}
+
 function OutcomeRow({
   outcome,
   maxOdds,
@@ -18,13 +39,13 @@ function OutcomeRow({
   maxOdds: number;
 }) {
   const barWidth = maxOdds > 0 ? (outcome.odds / maxOdds) * 100 : 0;
-  const code = getCountryCode(outcome.title);
+  const label = outcomeLabel(outcome.title);
 
   return (
     <div className="wc-outcome">
       <div className="wc-outcome__team">
-        <img className="wc-outcome__flag" src={outcome.icon} alt="" />
-        <span className="wc-outcome__code">{code}</span>
+        <OutcomeAvatar outcome={outcome} />
+        <span className="wc-outcome__code">{label}</span>
         <span className="wc-outcome__name">{outcome.title}</span>
       </div>
       <div className="wc-outcome__bar-wrap">

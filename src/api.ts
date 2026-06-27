@@ -104,6 +104,7 @@ export async function fetchEventBySlug(slug: string): Promise<WorldCupData> {
   const outcomes = (event.markets ?? [])
     .map((market) => toOutcome(market))
     .filter((item): item is WorldCupOutcome => item !== null)
+    .filter((outcome) => !isPlaceholderOutcome(outcome))
     .sort((a, b) => b.odds - a.odds);
 
   return {
@@ -228,6 +229,10 @@ export function applyLivePricesToChart(
   }
 
   return result;
+}
+
+function isPlaceholderOutcome(outcome: WorldCupOutcome): boolean {
+  return /^Player [A-Z]$/i.test(outcome.title.trim());
 }
 
 function toOutcome(market: PolymarketMarket): WorldCupOutcome | null {
