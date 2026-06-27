@@ -10,8 +10,37 @@ import {
   formatPercent,
 } from "../utils/format";
 
-const DEFAULT_STAKE = 100_000;
+const STAKE_PRESETS = [10_000, 25_000, 50_000, 100_000] as const;
+const DEFAULT_STAKE = STAKE_PRESETS[STAKE_PRESETS.length - 1];
 const TOP_TEAMS_LIMIT = 12;
+
+function TeamOption({
+  outcome,
+  active,
+  onSelect,
+}: {
+  outcome: WorldCupOutcome;
+  active: boolean;
+  onSelect: (id: string) => void;
+}) {
+  const code = getCountryCode(outcome.title);
+
+  return (
+    <button
+      type="button"
+      className={`wc-team-option${active ? " wc-team-option--active" : ""}`}
+      aria-pressed={active}
+      onClick={() => onSelect(outcome.id)}
+    >
+      <img className="wc-team-option__flag" src={outcome.icon} alt="" />
+      <span className="wc-team-option__body">
+        <span className="wc-team-option__code">{code}</span>
+        <span className="wc-team-option__name">{outcome.title}</span>
+        <span className="wc-team-option__odds">{formatPercent(outcome.odds)}</span>
+      </span>
+    </button>
+  );
+}
 
 function OutcomeRow({
   outcome,
@@ -40,13 +69,8 @@ function OutcomeRow({
 
 export function WorldCupPanel() {
   const { data, error, loading } = useWorldCup();
-  const [stakeInput, setStakeInput] = useState(String(DEFAULT_STAKE));
+  const [stake, setStake] = useState(DEFAULT_STAKE);
   const [selectedId, setSelectedId] = useState<string>("");
-
-  const stake = useMemo(() => {
-    const parsed = Number(stakeInput.replace(/,/g, ""));
-    return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
-  }, [stakeInput]);
 
   const selectedOutcome = useMemo(() => {
     if (!data) return null;
@@ -55,7 +79,7 @@ export function WorldCupPanel() {
   }, [data, selectedId]);
 
   const bet = useMemo(() => {
-    if (!selectedOutcome || stake <= 0) return null;
+    if (!selectedOutcome) return null;
     return calculateBet(stake, selectedOutcome.price);
   }, [selectedOutcome, stake]);
 
@@ -75,8 +99,7 @@ export function WorldCupPanel() {
 
   return (
     <section className="wc-panel">
-      <div className="wc-panel__grid">
-        <div className="wc-card">
+      <div className="wc-card">
           <div className="wc-card__header">
             <span className="wc-card__label">World Cup</span>
             <span className="wc-card__date">{formatDate(data.endDate)}</span>
@@ -102,49 +125,51 @@ export function WorldCupPanel() {
           </div>
         </div>
 
-        <div className="wc-calculator">
+      <div className="wc-calculator">
           <h3 className="wc-calculator__title">Bet calculator</h3>
           <p className="wc-calculator__subtitle">
             See what a winning bet would pay out at current Polymarket prices.
           </p>
 
           <div className="wc-calculator__fields">
-            <label className="wc-field">
+            <div className="wc-field">
               <span className="wc-field__label">Stake</span>
-              <div className="wc-field__input-wrap">
-                <span className="wc-field__prefix">$</span>
-                <input
-                  className="wc-field__input"
-                  type="text"
-                  inputMode="numeric"
-                  value={stakeInput}
-                  onChange={(event) => setStakeInput(event.target.value)}
-                />
-              </div>
-            </label>
-
-            <label className="wc-field">
-              <span className="wc-field__label">Team</span>
-              <select
-                className="wc-field__select"
-                value={activeId}
-                onChange={(event) => setSelectedId(event.target.value)}
-              >
-                {topOutcomes.map((outcome) => (
-                  <option key={outcome.id} value={outcome.id}>
-                    {getCountryCode(outcome.title)} · {outcome.title} (
-                    {formatPercent(outcome.odds)})
-                  </option>
+              <div className="wc-stake-options" role="group" aria-label="Stake amount">
+                {STAKE_PRESETS.map((amount) => (
+                  <button
+                    key={amount}
+                    type="button"
+                    className={`wc-stake-option${stake === amount ? " wc-stake-option--active" : ""}`}
+                    aria-pressed={stake === amount}
+                    onClick={() => setStake(amount)}
+                  >
+                    {formatCurrencyExact(amount)}
+                  </button>
                 ))}
-              </select>
-            </label>
+              </div>
+            </div>
+
+            <div className="wc-field">
+              <span className="wc-field__label">Team</span>
+              <div className="wc-team-options" role="group" aria-label="Select team">
+                {topOutcomes.map((outcome) => (
+                  <TeamOption
+                    key={outcome.id}
+                    outcome={outcome}
+                    active={activeId === outcome.id}
+                    onSelect={setSelectedId}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
 
           {bet && selectedOutcome ? (
             <div className="wc-calculator__results">
               <p className="wc-calculator__scenario">
                 If <strong>{selectedOutcome.title}</strong> wins at{" "}
-                {formatPercent(selectedOutcome.odds)} odds
+                {formatPercent(selectedOutcome.odds)} odds on a{" "}
+                {formatCurrency(stake)} stake
               </p>
               <div className="wc-result-grid">
                 <div className="wc-result">
@@ -169,10 +194,7 @@ export function WorldCupPanel() {
                 </div>
               </div>
             </div>
-          ) : (
-            <p className="wc-calculator__hint">Enter a valid stake amount to calculate.</p>
-          )}
-        </div>
+          ) : null}
       </div>
     </section>
   );

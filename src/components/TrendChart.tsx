@@ -10,7 +10,6 @@ import {
 } from "recharts";
 import { teamKey } from "../api";
 import type { TrendChartPoint, TrendSeries } from "../types";
-import { formatPercent } from "../utils/format";
 
 interface TrendChartProps {
   series: TrendSeries[];
@@ -112,21 +111,6 @@ export function TrendChart({
   return (
     <div className={`hero-chart ${compact ? "hero-chart--compact" : ""}`}>
       <div className="hero-chart__header">
-        <div className="hero-chart__legend">
-          {series.map((team) => (
-            <div key={team.id} className="hero-chart__legend-item">
-              <span
-                className="hero-chart__legend-dot"
-                style={{ backgroundColor: team.color }}
-              />
-              <span className="hero-chart__legend-name">{team.title}</span>
-              <span className="hero-chart__legend-value">
-                {formatPercent((team.history.at(-1)?.p ?? 0) * 100, 1)}
-              </span>
-            </div>
-          ))}
-        </div>
-
         <div className={`hero-chart__live ${isLive ? "hero-chart__live--on" : ""}`}>
           <span className="hero-chart__live-dot" />
           <span>{isLive ? "Live" : "Connecting"}</span>

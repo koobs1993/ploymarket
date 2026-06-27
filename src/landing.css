@@ -316,6 +316,7 @@
 
 /* CTA button — GFT split style */
 .join-btn {
+  position: relative;
   display: inline-flex;
   align-items: stretch;
   overflow: hidden;
@@ -327,6 +328,23 @@
   text-decoration: none;
   box-shadow: 0 16px 40px var(--gold-glow);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+  isolation: isolate;
+}
+
+.join-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.95) 50%,
+    transparent 100%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.55s ease;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .join-btn:hover {
@@ -334,7 +352,13 @@
   box-shadow: 0 20px 48px rgba(255, 193, 69, 0.32);
 }
 
+.join-btn:hover::before {
+  transform: translateX(120%);
+}
+
 .join-btn__label {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   padding: 14px 20px;
@@ -343,14 +367,23 @@
 }
 
 .join-btn__arrow {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 48px;
-  background: #fff;
+  background: var(--gold);
+  border-left: 1px solid rgba(17, 17, 17, 0.1);
   color: #111;
   font-size: 18px;
   font-weight: 700;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.join-btn:hover .join-btn__arrow {
+  background: #fff;
+  border-left-color: rgba(17, 17, 17, 0.08);
 }
 
 .join-btn--md .join-btn__label {
@@ -466,7 +499,7 @@
 
 .live-stack {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   width: 100%;
 }
 

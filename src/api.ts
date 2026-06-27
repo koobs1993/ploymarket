@@ -8,12 +8,12 @@ import type {
   WorldCupData,
   WorldCupOutcome,
 } from "./types";
+import { getCountryColor } from "./utils/countryCodes";
 
 const GAMMA_API = "https://gamma-api.polymarket.com";
 const CLOB_API = "https://clob.polymarket.com";
 const WORLD_CUP_EVENT_SLUG = "world-cup-winner";
 
-export const TREND_COLORS = ["#ffc145", "#ffe08a", "#f59e0b"] as const;
 export const TREND_TEAM_COUNT = 3;
 
 export async function fetchWorldCupData(): Promise<WorldCupData> {
@@ -79,7 +79,7 @@ export async function fetchTrendSeries(
     topOutcomes.map(async (outcome, index) => ({
       id: outcome.id,
       title: outcome.title,
-      color: TREND_COLORS[index] ?? TREND_COLORS[0],
+      color: getCountryColor(outcome.title, index),
       clobTokenId: outcome.clobTokenId,
       history: await fetchPriceHistory(outcome.clobTokenId),
     })),
