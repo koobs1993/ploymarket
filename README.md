@@ -1,6 +1,6 @@
-# Tradeify Prediction World Cup
+# GoatFunded World Cup
 
-Landing page for the Tradeify Prediction World Cup tournament with live Polymarket World Cup odds, a trends chart, scrolling ticker, and bet calculator.
+Landing page for the **GoatFunded World Cup** prediction tournament with live Polymarket World Cup odds, a trends chart, scrolling ticker, and bet calculator.
 
 ## Features
 

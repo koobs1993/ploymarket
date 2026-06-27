@@ -1,5 +1,8 @@
 export const TOURNAMENT_START = new Date("2026-06-28T12:00:00-04:00");
 
+export const BRAND_NAME = "GoatFunded";
+export const EVENT_NAME = "GoatFunded World Cup";
+
 export const heroStats = [
   { value: "$250,000", label: "Guaranteed" },
   { value: "$100,000", label: "To the Champion" },
@@ -90,24 +93,24 @@ export const phases = [
   },
 ];
 
-export const tradeifyPoints = [
+export const brandPoints = [
   {
     title: "Fast, Transparent Payouts",
-    body: "Tradeify is built around clear payout rules, simple requirements, and reliable reward processing.",
+    body: "GoatFunded is built around clear payout rules, simple requirements, and reliable reward processing.",
   },
   {
     title: "$250M+ Paid Out",
-    body: "Tradeify has already paid out more than $200,000,000 to traders.",
+    body: "GoatFunded has already paid out more than $250,000,000 to traders worldwide.",
   },
   {
     title: "Trader-First Rules",
-    body: "Clear targets, straightforward limits, and a platform experience designed around active futures traders.",
+    body: "Clear targets, straightforward limits, and a platform experience designed around active traders.",
   },
 ];
 
 export const faqs = [
   {
-    question: "Is the Tradeify Prediction World Cup free to enter?",
+    question: "Is the GoatFunded World Cup free to enter?",
     answer:
       "Yes. The tournament is free to enter. Every participant starts with $2,000 in virtual capital and competes on World Cup prediction markets for a chance to win from the $250,000 guaranteed prize pool.",
   },
@@ -146,4 +149,12 @@ export const faqs = [
     answer:
       "This is a leaderboard-based prediction trading tournament. You're not just placing one-off bets. You're managing virtual capital, trading World Cup markets, using Power Plays, climbing the leaderboard, and competing against other traders and countries for prizes.",
   },
+];
+
+export const navLinks = [
+  { label: "Markets", href: "#markets" },
+  { label: "How it works", href: "#how-it-works" },
+  { label: "Prizes", href: "#prizes" },
+  { label: "Rules", href: "#rules" },
+  { label: "FAQ", href: "#faq" },
 ];

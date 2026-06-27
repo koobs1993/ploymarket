@@ -13,6 +13,7 @@ body,
 
 body {
   font-family:
+    Inter,
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
@@ -102,8 +103,8 @@ body {
 .wc-hero-team__odds {
   padding: 4px 10px;
   border-radius: 999px;
-  background: #14532d;
-  color: #4ade80;
+  background: rgba(255, 193, 69, 0.12);
+  color: #ffc145;
   font-size: 13px;
   font-weight: 700;
 }
@@ -161,10 +162,10 @@ body {
 .hero-chart {
   width: 100%;
   padding: 18px;
-  border: 1px solid #1f1f1f;
+  border: 1px solid rgba(255, 193, 69, 0.12);
   border-radius: 16px;
   background:
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 42%),
+    radial-gradient(circle at top right, rgba(255, 193, 69, 0.08), transparent 42%),
     #050505;
 }
 
@@ -229,8 +230,8 @@ body {
 
 .hero-chart__live--on {
   color: #d4d4d4;
-  border-color: rgba(34, 197, 94, 0.25);
-  background: rgba(20, 83, 45, 0.18);
+  border-color: rgba(255, 193, 69, 0.25);
+  background: rgba(255, 193, 69, 0.08);
 }
 
 .hero-chart__live-dot {
@@ -241,8 +242,8 @@ body {
 }
 
 .hero-chart__live--on .hero-chart__live-dot {
-  background: #22c55e;
-  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+  background: #ffc145;
+  box-shadow: 0 0 0 0 rgba(255, 193, 69, 0.6);
   animation: live-pulse 2s infinite;
 }
 
@@ -251,18 +252,18 @@ body {
 }
 
 .hero-chart__live--on .hero-chart__live-time {
-  color: #86efac;
+  color: #ffd875;
 }
 
 @keyframes live-pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45);
+    box-shadow: 0 0 0 0 rgba(255, 193, 69, 0.45);
   }
   70% {
-    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+    box-shadow: 0 0 0 8px rgba(255, 193, 69, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    box-shadow: 0 0 0 0 rgba(255, 193, 69, 0);
   }
 }
 
@@ -421,7 +422,7 @@ body {
 }
 
 .ticker-item__change--up {
-  color: #22c55e;
+  color: #ffc145;
 }
 
 .ticker-item__change--down {
@@ -530,7 +531,7 @@ body {
 
 .wc-outcome__bar {
   height: 100%;
-  background: #3b82f6;
+  background: linear-gradient(90deg, #ffc145, #f59e0b);
   border-radius: 999px;
   min-width: 2px;
 }
@@ -677,7 +678,7 @@ body {
 }
 
 .wc-result__value--profit {
-  color: #22c55e;
+  color: #ffc145;
 }
 
 .wc-calculator__hint {

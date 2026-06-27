@@ -4,28 +4,33 @@ import { Marquee } from "./Marquee";
 import { WorldCupHero } from "../WorldCupHero";
 import { WorldCupPanel } from "../WorldCupPanel";
 import {
+  BRAND_NAME,
+  EVENT_NAME,
   TOURNAMENT_START,
+  brandPoints,
   faqs,
   featurePills,
   heroStats,
   howItWorks,
+  navLinks,
   phases,
   podiumPrizes,
   rewardTiers,
-  tradeifyPoints,
 } from "../../data/landingContent";
 
 function SectionHeading({
   eyebrow,
   title,
   subtitle,
+  align = "left",
 }: {
   eyebrow?: string;
   title: string;
   subtitle?: string;
+  align?: "left" | "center";
 }) {
   return (
-    <div className="section-heading">
+    <div className={`section-heading section-heading--${align}`}>
       {eyebrow && <span className="section-heading__eyebrow">{eyebrow}</span>}
       <h2 className="section-heading__title">{title}</h2>
       {subtitle && <p className="section-heading__subtitle">{subtitle}</p>}
@@ -36,23 +41,50 @@ function SectionHeading({
 export function LandingPage() {
   return (
     <div className="landing">
+      <div className="promo-bar">
+        <div className="container promo-bar__inner">
+          <span className="promo-bar__tag">Limited time</span>
+          <span>Free entry · $250,000 guaranteed prize pool · Tournament starts 28 June</span>
+        </div>
+      </div>
+
       <header className="landing-nav">
         <div className="container landing-nav__inner">
-          <div className="landing-nav__brand">
-            <span className="landing-nav__logo">⚽</span>
-            <span>Tradeify World Cup</span>
-          </div>
+          <a className="landing-nav__brand" href="#">
+            <span className="landing-nav__mark">GF</span>
+            <span className="landing-nav__name">
+              {BRAND_NAME}
+              <small>World Cup</small>
+            </span>
+          </a>
+
+          <nav className="landing-nav__links" aria-label="Primary">
+            {navLinks.map((link) => (
+              <a key={link.href} href={link.href} className="landing-nav__link">
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
           <JoinButton size="md" />
         </div>
       </header>
 
       <section className="landing-hero" id="join">
+        <div className="landing-hero__glow" aria-hidden="true" />
         <div className="container landing-hero__grid">
           <div className="landing-hero__copy">
-            <p className="landing-hero__eyebrow">Tradeify Prediction World Cup</p>
+            <div className="social-proof">
+              <span>50K+ traders competing</span>
+              <span className="social-proof__divider" />
+              <span className="social-proof__stars">★★★★★</span>
+              <span>4.8 from verified reviews</span>
+            </div>
+
+            <p className="landing-hero__eyebrow">{EVENT_NAME}</p>
             <h1 className="landing-hero__title">
-              Predict the World Cup Knockouts.{" "}
-              <span className="text-accent">Win $100,000.</span>
+              Predict the World Cup Knockouts.
+              <span className="text-accent"> Win $100,000.</span>
             </h1>
             <p className="landing-hero__desc">
               Enter free, start with $2,000 in virtual capital, and trade World
@@ -69,15 +101,17 @@ export function LandingPage() {
               ))}
             </div>
 
-            <JoinButton size="lg" />
-
-            <p className="landing-hero__trust">
-              Trusted by Kane, Rips, Rake and 50k other traders
-            </p>
+            <div className="landing-hero__actions">
+              <JoinButton size="lg" />
+              <p className="landing-hero__trust">
+                Trusted by Kane, Rips, Rake and 50k other traders
+              </p>
+            </div>
           </div>
 
           <div className="landing-hero__visual">
             <div className="visual-card">
+              <div className="visual-card__shine" aria-hidden="true" />
               <div className="visual-card__badge">Live odds</div>
               <WorldCupHero compact />
             </div>
@@ -87,7 +121,7 @@ export function LandingPage() {
 
       <Marquee items={featurePills} className="marquee--accent" />
 
-      <section className="landing-section landing-section--live">
+      <section className="landing-section landing-section--live" id="markets">
         <div className="container">
           <SectionHeading
             eyebrow="Live markets"
@@ -100,7 +134,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="landing-section">
+      <section className="landing-section" id="how-it-works">
         <div className="container">
           <SectionHeading eyebrow="How it works" title="Three steps to compete" />
           <div className="steps-grid">
@@ -133,9 +167,10 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="landing-section landing-section--prizes">
+      <section className="landing-section landing-section--prizes" id="prizes">
         <div className="container">
           <SectionHeading
+            align="center"
             title="$250,000 guaranteed. Top 500 get rewards."
             subtitle="A World Cup prediction tournament built for people who can read the game."
           />
@@ -178,7 +213,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="landing-section">
+      <section className="landing-section" id="rules">
         <div className="container">
           <SectionHeading
             eyebrow="Rules and schedule"
@@ -213,15 +248,16 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="landing-section landing-section--tradeify">
+      <section className="landing-section landing-section--brand">
         <div className="container">
           <SectionHeading
-            title="Run by the prop firm that already paid out $250,000,000+"
-            subtitle="Tradeify is the U.S. prop firm trusted by tens of thousands of futures traders for transparent rules, fast payouts, and trader-first design"
+            align="center"
+            title={`Run by ${BRAND_NAME}, the prop firm that paid out $250,000,000+`}
+            subtitle={`${BRAND_NAME} is trusted by tens of thousands of traders for transparent rules, fast payouts, and trader-first design.`}
           />
-          <div className="tradeify-grid">
-            {tradeifyPoints.map((point) => (
-              <article key={point.title} className="tradeify-card">
+          <div className="brand-grid">
+            {brandPoints.map((point) => (
+              <article key={point.title} className="brand-card">
                 <h3>{point.title}</h3>
                 <p>{point.body}</p>
               </article>
@@ -230,9 +266,13 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="landing-section">
+      <section className="landing-section" id="faq">
         <div className="container container--narrow">
-          <SectionHeading eyebrow="FAQs" title="Questions? We've got answers." />
+          <SectionHeading
+            align="center"
+            eyebrow="FAQs"
+            title="Questions? We've got answers."
+          />
           <div className="faq-list">
             {faqs.map((faq) => (
               <details key={faq.question} className="faq-item">
@@ -245,9 +285,12 @@ export function LandingPage() {
       </section>
 
       <section className="landing-final">
+        <div className="landing-final__glow" aria-hidden="true" />
         <div className="container landing-final__inner">
           <div className="landing-final__copy">
-            <p className="landing-final__eyebrow">Don't just watch the World Cup. Trade it.</p>
+            <p className="landing-final__eyebrow">
+              Don't just watch the World Cup. Trade it.
+            </p>
             <h2 className="landing-final__title">
               Win up to <span className="text-accent">$100,000</span>.
             </h2>
@@ -263,7 +306,11 @@ export function LandingPage() {
 
       <footer className="landing-footer">
         <div className="container landing-footer__inner">
-          <p>© 2026 Tradeify. All rights reserved.</p>
+          <div className="landing-footer__brand">
+            <span className="landing-nav__mark">GF</span>
+            <span>{EVENT_NAME}</span>
+          </div>
+          <p>© 2026 {BRAND_NAME}. All rights reserved.</p>
           <p>World Cup prediction tournament. Free entry. Virtual capital only.</p>
         </div>
       </footer>

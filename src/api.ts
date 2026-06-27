@@ -13,7 +13,7 @@ const GAMMA_API = "https://gamma-api.polymarket.com";
 const CLOB_API = "https://clob.polymarket.com";
 const WORLD_CUP_EVENT_SLUG = "world-cup-winner";
 
-export const TREND_COLORS = ["#3b82f6", "#38bdf8", "#fb7185"] as const;
+export const TREND_COLORS = ["#ffc145", "#ffe08a", "#f59e0b"] as const;
 export const TREND_TEAM_COUNT = 3;
 
 export async function fetchWorldCupData(): Promise<WorldCupData> {
