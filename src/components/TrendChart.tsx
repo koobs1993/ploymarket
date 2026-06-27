@@ -27,6 +27,22 @@ interface TooltipPayload {
   value: number;
 }
 
+function dedupeTooltipPayload(payload: TooltipPayload[]): TooltipPayload[] {
+  const byName = new Map<string, TooltipPayload>();
+
+  for (const entry of payload) {
+    const key = String(entry.name ?? "").toLowerCase();
+    const existing = byName.get(key);
+    const isProperName = entry.name.length > 0 && entry.name[0] === entry.name[0].toUpperCase();
+
+    if (!existing || (isProperName && existing.name === existing.name.toLowerCase())) {
+      byName.set(key, entry);
+    }
+  }
+
+  return Array.from(byName.values());
+}
+
 function ChartTooltip({
   active,
   payload,
@@ -38,10 +54,12 @@ function ChartTooltip({
 }) {
   if (!active || !payload?.length) return null;
 
+  const items = dedupeTooltipPayload(payload);
+
   return (
     <div className="hero-chart__tooltip">
       <div className="hero-chart__tooltip-label">{label}</div>
-      {payload.map((entry) => (
+      {items.map((entry) => (
         <div key={entry.name} className="hero-chart__tooltip-row">
           <span
             className="hero-chart__tooltip-dot"
@@ -167,10 +185,12 @@ export function TrendChart({
                   key={`area-${team.id}`}
                   type="monotone"
                   dataKey={key}
+                  name={team.title}
                   stroke="none"
                   fill={`url(#gradient-${team.id})`}
                   connectNulls
                   isAnimationActive={false}
+                  hide
                 />
               );
             })}

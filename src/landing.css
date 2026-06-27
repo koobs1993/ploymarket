@@ -171,19 +171,35 @@
   position: relative;
   padding: 40px 0 48px;
   overflow: hidden;
+  background-color: #000;
+  background-image: url("./img/worldcup-bg.png");
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+}
+
+.landing-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.82) 42%, rgba(0, 0, 0, 0.55) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 35%, rgba(0, 0, 0, 0.65) 100%);
+  pointer-events: none;
 }
 
 .landing-hero__glow {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 15% 20%, rgba(255, 193, 69, 0.14), transparent 34%),
-    radial-gradient(circle at 85% 10%, rgba(255, 193, 69, 0.08), transparent 28%);
+    radial-gradient(circle at 15% 20%, rgba(255, 193, 69, 0.1), transparent 34%),
+    radial-gradient(circle at 85% 10%, rgba(255, 193, 69, 0.06), transparent 28%);
   pointer-events: none;
 }
 
 .landing-hero__grid {
   position: relative;
+  z-index: 1;
   display: grid;
   gap: 36px;
   align-items: center;
