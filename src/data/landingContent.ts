@@ -4,17 +4,48 @@ export const BRAND_NAME = "GoatFunded";
 export const EVENT_NAME = "GoatFunded World Cup";
 
 export const heroStats = [
-  { value: "$250,000", label: "Guaranteed" },
-  { value: "$100,000", label: "To the Champion" },
-  { value: "Top 500", label: "Earn Rewards" },
+  { value: "$10K", label: "Cash Prizes" },
+  { value: "$1M", label: "In Funding" },
+  { value: "Top 50", label: "Winners" },
 ];
 
 export const featurePills = [
-  "$250K guaranteed",
+  "$10K cash prizes",
+  "$1M in funding",
   "$2,000 virtual capital",
-  "Top 500 win",
-  "Country leaderboards",
+  "Top 50 win",
   "Free entry",
+];
+
+export const prizeHeadline = {
+  cash: "$10K CASH",
+  funding: "$1M FUNDING",
+  tagline: "UP FOR GRABS",
+};
+
+export const topTenPrizes = [
+  { place: "1", cash: "$5,000", fundedAccount: "$100,000" },
+  { place: "2", cash: "$1,500", fundedAccount: "$100,000" },
+  { place: "3", cash: "$1,000", fundedAccount: "$100,000" },
+  { place: "4", cash: "$700", fundedAccount: "$100,000" },
+  { place: "5", cash: "$500", fundedAccount: "$100,000" },
+  { place: "6", cash: "$400", fundedAccount: "$50,000" },
+  { place: "7", cash: "$300", fundedAccount: "$50,000" },
+  { place: "8", cash: "$250", fundedAccount: "$50,000" },
+  { place: "9", cash: "$200", fundedAccount: "$50,000" },
+  { place: "10", cash: "$150", fundedAccount: "$50,000" },
+];
+
+export const places11to50Prizes = [
+  { places: "11 – 20", prize: "$10,000 account", winners: "10 accounts" },
+  { places: "21 – 50", prize: "$5,000 account", winners: "30 accounts" },
+];
+
+export const prizeTotals = [
+  { label: "Total cash prizes", value: "$10,000" },
+  { label: "Total funded accounts", value: "$1,000,000" },
+  { label: "Total prize pool", value: "$1,010,000", featured: true },
+  { label: "Total winners", value: "50" },
 ];
 
 export const howItWorks = [
@@ -36,23 +67,6 @@ export const howItWorks = [
   },
 ];
 
-export const podiumPrizes = [
-  { place: "2", rank: "2nd Place", amount: "$40,000", bonus: "+ Select 150k account" },
-  { place: "1", rank: "1st Place", amount: "$100,000", bonus: "+ Select 150k account", featured: true },
-  { place: "3", rank: "3rd Place", amount: "$20,000", bonus: "+ Select 150k account" },
-];
-
-export const rewardTiers = [
-  { rank: "4th", reward: "$12,000", bonus: "+ Select 150k account" },
-  { rank: "5th", reward: "$9,500", bonus: "+ Select 150k account" },
-  { rank: "6th - 10th", reward: "$3,000", bonus: "+ Select 150k account" },
-  { rank: "11th - 25th", reward: "$1,200", bonus: "+ Select 100k account" },
-  { rank: "26th - 50th", reward: "$600", bonus: "+ Select 100k account" },
-  { rank: "51st - 100th", reward: "$250", bonus: "+ Select 50k account" },
-  { rank: "101st - 200th", reward: "$80", bonus: "+ Select 50k account" },
-  { rank: "201st - 500th", reward: "", bonus: "+ Select 25k account" },
-  { rank: "All entrants", reward: "50% off coupon", bonus: "(one-time use)" },
-];
 
 export const phases = [
   {
@@ -112,7 +126,7 @@ export const faqs = [
   {
     question: "Is the GoatFunded World Cup free to enter?",
     answer:
-      "Yes. The tournament is free to enter. Every participant starts with $2,000 in virtual capital and competes on World Cup prediction markets for a chance to win from the $250,000 guaranteed prize pool.",
+      "Yes. The tournament is free to enter. Every participant starts with $2,000 in virtual capital and competes on World Cup prediction markets for a chance to win from the $1,010,000 prize pool — $10,000 in cash plus $1,000,000 in funded accounts.",
   },
   {
     question: "What will I be trading?",
@@ -122,7 +136,7 @@ export const faqs = [
   {
     question: "How do I win prizes?",
     answer:
-      "Your leaderboard position is based on total tournament P&L. The higher your P&L, the higher you rank. The top 500 traders win cash prizes or Select eval accounts, and every participant receives a one-time 50% coupon regardless of rank.",
+      "Your leaderboard position is based on total tournament P&L. The higher your P&L, the higher you rank. The top 10 win cash plus funded accounts, places 11–50 win funded accounts, and 50 traders total take home prizes.",
   },
   {
     question: "What are Power Plays?",

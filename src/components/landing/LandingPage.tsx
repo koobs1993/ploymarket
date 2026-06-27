@@ -14,8 +14,10 @@ import {
   howItWorks,
   navLinks,
   phases,
-  podiumPrizes,
-  rewardTiers,
+  places11to50Prizes,
+  prizeHeadline,
+  prizeTotals,
+  topTenPrizes,
 } from "../../data/landingContent";
 
 function SectionHeading({
@@ -44,7 +46,7 @@ export function LandingPage() {
       <div className="promo-bar">
         <div className="container promo-bar__inner">
           <span className="promo-bar__tag">Limited time</span>
-          <span>Free entry · $250,000 guaranteed prize pool · Tournament starts 28 June</span>
+          <span>Free entry · $10K cash + $1M funding · Tournament starts 28 June</span>
         </div>
       </div>
 
@@ -80,12 +82,12 @@ export function LandingPage() {
             <p className="landing-hero__eyebrow">{EVENT_NAME}</p>
             <h1 className="landing-hero__title">
               Predict the World Cup Knockouts.
-              <span className="text-accent"> Win $100,000.</span>
+              <span className="text-accent"> Win cash &amp; funding.</span>
             </h1>
             <p className="landing-hero__desc">
               Enter free, start with $2,000 in virtual capital, and trade World
               Cup prediction markets against thousands of other competitors. Top
-              500 traders earn rewards.
+              50 traders win cash and funded accounts.
             </p>
 
             <div className="stat-grid">
@@ -158,42 +160,82 @@ export function LandingPage() {
 
       <section className="landing-section landing-section--prizes" id="prizes">
         <div className="container">
+          <div className="prize-banner">
+            <span className="prize-banner__cash">{prizeHeadline.cash}</span>
+            <span className="prize-banner__dot" aria-hidden="true">
+              •
+            </span>
+            <span className="prize-banner__funding">{prizeHeadline.funding}</span>
+            <span className="prize-banner__tagline">{prizeHeadline.tagline}</span>
+          </div>
+
           <SectionHeading
             align="center"
-            title="$250,000 guaranteed. Top 500 get rewards."
+            title="$10K cash and $1M in funded accounts."
             subtitle="A World Cup prediction tournament built for people who can read the game."
           />
 
-          <div className="podium">
-            {podiumPrizes.map((prize) => (
-              <div
-                key={prize.place}
-                className={`podium-card ${prize.featured ? "podium-card--featured" : ""}`}
-              >
-                <span className="podium-card__place">{prize.place}</span>
-                <span className="podium-card__rank">{prize.rank}</span>
-                <span className="podium-card__amount">{prize.amount}</span>
-                <span className="podium-card__bonus">{prize.bonus}</span>
-              </div>
-            ))}
+          <div className="prize-table-block">
+            <h3 className="prize-table-block__title">Top 10 — Cash + Funded Account</h3>
+            <div className="prize-table-wrap">
+              <table className="prize-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Place</th>
+                    <th scope="col">Cash Prize</th>
+                    <th scope="col">Funded Account</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {topTenPrizes.map((prize) => (
+                    <tr key={prize.place}>
+                      <td>{prize.place}</td>
+                      <td>{prize.cash}</td>
+                      <td>{prize.fundedAccount}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          <div className="rewards-block">
-            <h3 className="rewards-block__title">Top 500 traders earn rewards</h3>
-            <p className="rewards-block__subtitle">Cash rewards and trading accounts</p>
-            <div className="rewards-list">
-              {rewardTiers.map((tier) => (
-                <div key={tier.rank} className="rewards-row">
-                  <span className="rewards-row__rank">{tier.rank}</span>
-                  <span className="rewards-row__reward">
-                    {tier.reward || tier.bonus}
-                  </span>
-                  {tier.reward ? (
-                    <span className="rewards-row__bonus">{tier.bonus}</span>
-                  ) : null}
+          <div className="prize-table-block">
+            <h3 className="prize-table-block__title">Places 11 – 50 — Funded Account</h3>
+            <div className="prize-table-wrap">
+              <table className="prize-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Places</th>
+                    <th scope="col">Prize</th>
+                    <th scope="col">Winners</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {places11to50Prizes.map((tier) => (
+                    <tr key={tier.places}>
+                      <td>{tier.places}</td>
+                      <td>{tier.prize}</td>
+                      <td>{tier.winners}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="prize-totals">
+            <h3 className="prize-totals__title">Totals</h3>
+            <dl className="prize-totals__grid">
+              {prizeTotals.map((item) => (
+                <div
+                  key={item.label}
+                  className={`prize-total${item.featured ? " prize-total--featured" : ""}`}
+                >
+                  <dt>{item.label}</dt>
+                  <dd>{item.value}</dd>
                 </div>
               ))}
-            </div>
+            </dl>
           </div>
 
           <div className="section-cta">
@@ -281,7 +323,7 @@ export function LandingPage() {
               Don't just watch the World Cup. Trade it.
             </p>
             <h2 className="landing-final__title">
-              Win up to <span className="text-accent">$100,000</span>.
+              Win up to <span className="text-accent">$5,000 + $100K funding</span>.
             </h2>
             <p className="landing-final__desc">
               Enter free with $2,000 in virtual capital and compete on P&L
