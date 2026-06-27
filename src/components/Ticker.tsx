@@ -5,11 +5,15 @@ import { TickerItemRow } from "./TickerItem";
 export function Ticker() {
   const { data, error, loading } = useWorldCup();
 
+  if (loading && !data) {
+    return <div className="ticker ticker--loading">Loading markets…</div>;
+  }
+
   if (error && !data) {
     return <div className="ticker ticker--error">{error}</div>;
   }
 
-  if (loading || !data) {
+  if (!data) {
     return <div className="ticker ticker--loading">Loading markets…</div>;
   }
 

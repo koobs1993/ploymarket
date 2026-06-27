@@ -67,31 +67,33 @@ export function WorldCupProvider({ children }: { children: ReactNode }) {
         setTrendsLoading(false);
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to load trends");
+          setError(formatMarketError(err));
           setTrendsLoading(false);
         }
       }
     }
 
-    async function loadMarkets() {
+    async function loadMarkets(isInitial = false) {
       try {
         const next = await fetchWorldCupData();
-        if (cancelled) return;
+        if (cancelled) return next;
         setBaseData(next);
         setError(null);
-        setLoading(false);
         return next;
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to load markets");
-          setLoading(false);
+          setError(formatMarketError(err));
         }
         return null;
+      } finally {
+        if (!cancelled && isInitial) {
+          setLoading(false);
+        }
       }
     }
 
     async function init() {
-      const next = await loadMarkets();
+      const next = await loadMarkets(true);
       if (next) await loadHistory(next.outcomes);
     }
 
@@ -174,4 +176,22 @@ export function useWorldCup() {
     throw new Error("useWorldCup must be used within WorldCupProvider");
   }
   return context;
+}
+
+function formatMarketError(err: unknown): string {
+  if (!(err instanceof Error)) return "Failed to load markets";
+
+  if (err.message.includes("timed out")) {
+    return "Polymarket is taking too long to respond. Please refresh and try again.";
+  }
+
+  if (
+    err.message.includes("Failed to fetch") ||
+    err.message.includes("Failed to reach Polymarket") ||
+    err.message.includes("NetworkError")
+  ) {
+    return "Couldn't reach Polymarket. Check your connection or refresh the page.";
+  }
+
+  return err.message;
 }

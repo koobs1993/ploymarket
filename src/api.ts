@@ -10,11 +10,77 @@ import type {
 } from "./types";
 import { getCountryColor } from "./utils/countryCodes";
 
-const GAMMA_API = "https://gamma-api.polymarket.com";
-const CLOB_API = "https://clob.polymarket.com";
+const GAMMA_HOST = "https://gamma-api.polymarket.com";
+const CLOB_HOST = "https://clob.polymarket.com";
 const WORLD_CUP_EVENT_SLUG = "world-cup-winner";
+const FETCH_TIMEOUT_MS = 15_000;
+const FETCH_RETRIES = 3;
 
 export const TREND_TEAM_COUNT = 3;
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function buildApiUrl(
+  service: "gamma" | "clob",
+  path: string,
+  params: URLSearchParams,
+): string {
+  if (import.meta.env.DEV) {
+    const host = service === "gamma" ? GAMMA_HOST : CLOB_HOST;
+    const query = params.toString();
+    return `${host}/${path}${query ? `?${query}` : ""}`;
+  }
+
+  const proxyParams = new URLSearchParams(params);
+  proxyParams.set("service", service);
+  proxyParams.set("path", path);
+  return `/.netlify/functions/polymarket?${proxyParams.toString()}`;
+}
+
+async function fetchWithTimeout(url: string, timeoutMs = FETCH_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, {
+      signal: controller.signal,
+      headers: { Accept: "application/json" },
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function fetchWithRetry(url: string) {
+  let lastError: Error | undefined;
+
+  for (let attempt = 0; attempt < FETCH_RETRIES; attempt += 1) {
+    try {
+      const response = await fetchWithTimeout(url);
+      if (response.ok) return response;
+
+      lastError = new Error(`Polymarket API error: ${response.status}`);
+      if (response.status >= 400 && response.status < 500) {
+        throw lastError;
+      }
+    } catch (err) {
+      if (err instanceof Error && err.name === "AbortError") {
+        lastError = new Error("Polymarket request timed out");
+      } else {
+        lastError =
+          err instanceof Error ? err : new Error("Failed to reach Polymarket");
+      }
+    }
+
+    if (attempt < FETCH_RETRIES - 1) {
+      await sleep(1000 * (attempt + 1));
+    }
+  }
+
+  throw lastError ?? new Error("Failed to reach Polymarket");
+}
 
 export async function fetchWorldCupData(): Promise<WorldCupData> {
   const params = new URLSearchParams({
@@ -23,10 +89,7 @@ export async function fetchWorldCupData(): Promise<WorldCupData> {
     closed: "false",
   });
 
-  const response = await fetch(`${GAMMA_API}/events?${params}`);
-  if (!response.ok) {
-    throw new Error(`Polymarket API error: ${response.status}`);
-  }
+  const response = await fetchWithRetry(buildApiUrl("gamma", "events", params));
 
   const events: PolymarketEvent[] = await response.json();
   const event = events[0];
@@ -61,10 +124,9 @@ export async function fetchPriceHistory(
     fidelity: "1440",
   });
 
-  const response = await fetch(`${CLOB_API}/prices-history?${params}`);
-  if (!response.ok) {
-    throw new Error(`Price history error: ${response.status}`);
-  }
+  const response = await fetchWithRetry(
+    buildApiUrl("clob", "prices-history", params),
+  );
 
   const payload: { history?: PriceHistoryPoint[] } = await response.json();
   return payload.history ?? [];
