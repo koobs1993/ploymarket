@@ -1,4 +1,5 @@
 import { JoinButton } from "./JoinButton";
+import { BrandLogo } from "./BrandLogo";
 import { Countdown } from "./Countdown";
 import { WorldCupHero } from "../WorldCupHero";
 import { WorldCupPanel } from "../WorldCupPanel";
@@ -50,11 +51,7 @@ export function LandingPage() {
       <header className="landing-nav">
         <div className="container landing-nav__inner">
           <a className="landing-nav__brand" href="#">
-            <span className="landing-nav__mark">GF</span>
-            <span className="landing-nav__name">
-              {BRAND_NAME}
-              <small>World Cup</small>
-            </span>
+            <BrandLogo className="brand-logo--nav" />
           </a>
 
           <nav className="landing-nav__links" aria-label="Primary">
@@ -299,8 +296,7 @@ export function LandingPage() {
       <footer className="landing-footer">
         <div className="container landing-footer__inner">
           <div className="landing-footer__brand">
-            <span className="landing-nav__mark">GF</span>
-            <span>{EVENT_NAME}</span>
+            <BrandLogo className="brand-logo--footer" />
           </div>
           <p>© 2026 {BRAND_NAME}. All rights reserved.</p>
           <p>World Cup prediction tournament. Free entry. Virtual capital only.</p>
