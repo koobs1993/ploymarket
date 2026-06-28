@@ -991,6 +991,14 @@
   color: #525252;
 }
 
+.podium-card__place-icon {
+  display: block;
+  width: auto;
+  height: clamp(76px, 11vw, 104px);
+  margin-inline: auto;
+  object-fit: contain;
+}
+
 .podium-card--featured .podium-card__place {
   color: var(--gold);
 }

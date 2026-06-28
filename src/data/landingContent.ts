@@ -1,3 +1,4 @@
+import firstPlaceIcon from "../img/1st-place.png";
 import getFundedIcon from "../img/get-funded-icon.png";
 import joinFreeIcon from "../img/join-free-icon.png";
 import predictWinIcon from "../img/predict-win-icon.png";
@@ -44,6 +45,7 @@ export const podiumPrizes = [
     account: "$100,000 account",
     tone: "gold" as const,
     featured: true,
+    placeImage: firstPlaceIcon,
   },
   {
     place: "3",
