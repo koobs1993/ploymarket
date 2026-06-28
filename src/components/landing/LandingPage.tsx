@@ -1,3 +1,5 @@
+import { FeaturedIn } from "./FeaturedIn";
+import { Footer } from "./Footer";
 import { HowItWorks } from "./HowItWorks";
 import { JoinButton } from "./JoinButton";
 import { BrandLogo } from "./BrandLogo";
@@ -8,12 +10,10 @@ import { PrizePodium } from "./PrizePodium";
 import { WorldCupHero } from "../WorldCupHero";
 import { WorldCupPredictions } from "../WorldCupPredictions";
 import {
-  BRAND_NAME,
   EVENT_NAME,
   faqs,
   heroBenefits,
   prizeHeadline,
-  socialLinks,
 } from "../../data/landingContent";
 
 function SectionHeading({
@@ -54,7 +54,8 @@ export function LandingPage() {
             <p className="landing-hero__eyebrow">{EVENT_NAME}</p>
             <h1 className="landing-hero__title">
               Predict the World Cup.
-              <span className="text-accent"> Win cash &amp; funding.</span>
+              <br />
+              <span className="text-accent">Win cash &amp; funding.</span>
             </h1>
             <p className="landing-hero__desc">
               Trade with $100,000 in simulated capital
@@ -80,6 +81,8 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+
+      <FeaturedIn />
 
       <section className="landing-section landing-section--steps" id="how-it-works">
         <div className="container">
@@ -157,41 +160,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <footer className="landing-footer">
-        <div className="container landing-footer__inner">
-          <div className="landing-footer__brand">
-            <BrandLogo className="brand-logo--footer" />
-          </div>
-
-          <div className="landing-footer__socials">
-            <p className="landing-footer__socials-title">Socials</p>
-            <div className="landing-footer__socials-list">
-              {socialLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="landing-footer__social-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img
-                    className="landing-footer__social-icon"
-                    src={link.icon}
-                    alt=""
-                    loading="lazy"
-                  />
-                  <span>{link.name}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <div className="landing-footer__legal">
-            <p>© 2026 {BRAND_NAME}. All rights reserved.</p>
-            <p>World Cup prediction tournament. Free entry. Simulated capital only.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       <StickyJoinBar />
     </div>

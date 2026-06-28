@@ -1,16 +1,8 @@
-import { BRAND_NAME, brandStats, mediaLogos } from "../../data/landingContent";
+import { BRAND_NAME, brandStats } from "../../data/landingContent";
 
 export function BrandSocialProof() {
   return (
     <div className="brand-proof">
-      <div className="brand-proof__logos">
-        {mediaLogos.map((logo) => (
-          <div key={logo.name} className="brand-proof__logo">
-            <img src={logo.src} alt={logo.name} loading="lazy" />
-          </div>
-        ))}
-      </div>
-
       <div className="brand-proof__intro">
         <span className="section-heading__eyebrow">Run by {BRAND_NAME}</span>
         <h2 className="brand-proof__title">
