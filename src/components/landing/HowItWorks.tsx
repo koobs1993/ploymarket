@@ -1,4 +1,4 @@
-import { howItWorks, howItWorksArrow } from "../../data/landingContent";
+import { howItWorks } from "../../data/landingContent";
 
 export function HowItWorks() {
   return (
@@ -17,7 +17,7 @@ export function HowItWorks() {
           </div>
           {step.showArrow && (
             <div className="hiw-card__arrow" aria-hidden="true">
-              <img src={howItWorksArrow} alt="" />
+              <span className="hiw-card__arrow-icon" />
             </div>
           )}
         </article>

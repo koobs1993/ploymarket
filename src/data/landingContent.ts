@@ -1,3 +1,7 @@
+import getFundedIcon from "../img/get-funded-icon.png";
+import joinFreeIcon from "../img/join-free-icon.png";
+import predictWinIcon from "../img/predict-win-icon.png";
+
 export const TOURNAMENT_START = new Date("2026-06-28T12:00:00-04:00");
 
 export const BRAND_NAME = "GoatFunded";
@@ -56,26 +60,22 @@ export const howItWorks = [
   {
     name: "Join FREE",
     description: "Create your free account — no payment required",
-    illustration:
-      "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/693240330f7b6093e29534ef_HIW%20Unlock%20Capital.webp",
-    illustrationAlt: "Silver padlock and gold key symbolizing security and access.",
+    illustration: joinFreeIcon,
+    illustrationAlt: "Gold gift box with a free price tag.",
     showArrow: true,
   },
   {
     name: "Get Funded",
     description: "Get $100,000 in simulated capital",
-    illustration:
-      "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69324141d05b4552cc696e90_HIW%20Trade.webp",
-    illustrationAlt:
-      "Gold and silver bars with a cursor arrow pointing toward the chart.",
+    illustration: getFundedIcon,
+    illustrationAlt: "Stacks of gold banknotes labeled $100,000.",
     showArrow: true,
   },
   {
     name: "Predict & Win",
     description: "Win cash and funded accounts",
-    illustration:
-      "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69324034f3b026991c768053_HIW%20Earn.webp",
-    illustrationAlt: "Silver credit card with chip alongside gold and silver coins.",
+    illustration: predictWinIcon,
+    illustrationAlt: "Gold trophy with coins, cash, and an upward arrow.",
     showArrow: false,
   },
 ] as const;
