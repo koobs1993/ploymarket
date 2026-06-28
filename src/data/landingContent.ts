@@ -53,10 +53,35 @@ export const prizeTotals = [
 ];
 
 export const howItWorks = [
-  { step: "1", title: "Join FREE" },
-  { step: "2", title: "Get $100,000 Simulated Funding" },
-  { step: "3", title: "Predict & Win" },
-];
+  {
+    name: "Join FREE",
+    description: "Create your free account — no payment required",
+    illustration:
+      "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/693240330f7b6093e29534ef_HIW%20Unlock%20Capital.webp",
+    illustrationAlt: "Silver padlock and gold key symbolizing security and access.",
+    showArrow: true,
+  },
+  {
+    name: "Get Funded",
+    description: "Get $100,000 in simulated capital",
+    illustration:
+      "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69324141d05b4552cc696e90_HIW%20Trade.webp",
+    illustrationAlt:
+      "Gold and silver bars with a cursor arrow pointing toward the chart.",
+    showArrow: true,
+  },
+  {
+    name: "Predict & Win",
+    description: "Win cash and funded accounts",
+    illustration:
+      "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69324034f3b026991c768053_HIW%20Earn.webp",
+    illustrationAlt: "Silver credit card with chip alongside gold and silver coins.",
+    showArrow: false,
+  },
+] as const;
+
+export const howItWorksArrow =
+  "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/692fa452ca73ac3398155143_arrow-right.webp";
 
 export const secondaryMarketSlugs = [
   "world-cup-golden-glove-winner-20260603195306910",
@@ -134,3 +159,31 @@ export const faqs = [
       "This is a free prediction trading tournament on simulated capital. You're competing on a leaderboard for cash and funded accounts — not placing real-money bets.",
   },
 ];
+
+export const socialLinks = [
+  {
+    name: "Instagram",
+    href: "https://www.instagram.com/goatfundedtrader_gft?igsh=eDlyODkwdG0zZ2dq",
+    icon: "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/6937cebdf77f9ec38b137b03_Instagram%20Icon.webp",
+  },
+  {
+    name: "Discord",
+    href: "https://discord.gg/ZRNesgBrtv",
+    icon: "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/6937cebd31230c2958e27f08_Discord%20Icon.webp",
+  },
+  {
+    name: "X",
+    href: "https://x.com/GoatFunded",
+    icon: "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/6937cebde2c0aead6e64b309_X%20Icon.webp",
+  },
+  {
+    name: "YouTube",
+    href: "https://www.youtube.com/@goatfundedtrader",
+    icon: "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/6937cebd979eba55bb6031e0_Youtube%20Icon.webp",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/company/goat-funded-trader?trk=public_post_feed-actor-image",
+    icon: "https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/6937cebd643ba66e13e7d085_LinkedIn%20Icon.webp",
+  },
+] as const;

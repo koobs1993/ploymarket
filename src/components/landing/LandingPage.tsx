@@ -1,3 +1,4 @@
+import { HowItWorks } from "./HowItWorks";
 import { JoinButton } from "./JoinButton";
 import { BrandLogo } from "./BrandLogo";
 import { BrandSocialProof } from "./BrandSocialProof";
@@ -11,8 +12,8 @@ import {
   EVENT_NAME,
   faqs,
   heroBenefits,
-  howItWorks,
   prizeHeadline,
+  socialLinks,
 } from "../../data/landingContent";
 
 function SectionHeading({
@@ -85,18 +86,10 @@ export function LandingPage() {
           <SectionHeading
             eyebrow="How It Works"
             title="Participating Is This Easy"
+            subtitle="Trade with simulated capital and compete for real cash and funding."
             align="center"
           />
-          <div className="steps-panel">
-            <div className="steps-grid steps-grid--simple">
-              {howItWorks.map((step) => (
-                <article key={step.step} className="step-card step-card--simple">
-                  <span className="step-card__number">{step.step}</span>
-                  <h3 className="step-card__title">{step.title}</h3>
-                </article>
-              ))}
-            </div>
-          </div>
+          <HowItWorks />
         </div>
       </section>
 
@@ -169,8 +162,34 @@ export function LandingPage() {
           <div className="landing-footer__brand">
             <BrandLogo className="brand-logo--footer" />
           </div>
-          <p>© 2026 {BRAND_NAME}. All rights reserved.</p>
-          <p>World Cup prediction tournament. Free entry. Simulated capital only.</p>
+
+          <div className="landing-footer__socials">
+            <p className="landing-footer__socials-title">Socials</p>
+            <div className="landing-footer__socials-list">
+              {socialLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="landing-footer__social-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    className="landing-footer__social-icon"
+                    src={link.icon}
+                    alt=""
+                    loading="lazy"
+                  />
+                  <span>{link.name}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="landing-footer__legal">
+            <p>© 2026 {BRAND_NAME}. All rights reserved.</p>
+            <p>World Cup prediction tournament. Free entry. Simulated capital only.</p>
+          </div>
         </div>
       </footer>
 
