@@ -1,0 +1,89 @@
+@font-face {
+  font-family: Altform;
+  src: url("https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69e0f2571b910bd491a1a844_AltformTRIAL-Light.woff2")
+    format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Altform;
+  src: url("https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69e0f257167d103a4ddcf59e_AltformTRIAL-Regular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Altform;
+  src: url("https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69e0f25729f6c8932c56e888_AltformTRIAL-SemiBold.woff2")
+    format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Altform;
+  src: url("https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69e0f2571d2b508fd23e594d_AltformTRIAL-Bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Altform;
+  src: url("https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69e0f257cf68e6721355f3a7_AltformTRIAL-Black.woff2")
+    format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: AeonikProTRIAL;
+  src: url("https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69e0f6778ecf29f4848de182_AeonikProTRIAL-Regular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: AeonikProTRIAL;
+  src: url("https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69e0f6770423ecfad495732d_AeonikProTRIAL-Medium.woff2")
+    format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: AeonikProTRIAL;
+  src: url("https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69e0f6783288b261932e0a4d_AeonikProTRIAL-SemiBold.woff2")
+    format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: AeonikProTRIAL;
+  src: url("https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69e0f677e912aa3ab41311a8_AeonikProTRIAL-Bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: AeonikProTRIAL;
+  src: url("https://cdn.prod.website-files.com/692d3a3e37a293dd19f3b43e/69e0f67844bbd62d50224ec2_AeonikProTRIAL-Black.woff2")
+    format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}

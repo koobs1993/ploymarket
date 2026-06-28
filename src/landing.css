@@ -16,6 +16,16 @@
 .landing {
   overflow-x: hidden;
   background: #000;
+  font-family: var(--font-body);
+}
+
+.landing [class$="__title"],
+.landing [class$="__eyebrow"],
+.landing [class*="__cash"],
+.landing [class*="__funding"],
+.landing [class*="__place"],
+.landing [class*="__value"] {
+  font-family: var(--font-heading);
 }
 
 @media (max-width: 959px) {
@@ -228,6 +238,7 @@
 
 .landing-hero__eyebrow {
   margin: 0 0 14px;
+  font-family: var(--font-heading);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -237,6 +248,7 @@
 
 .landing-hero__title {
   margin: 0;
+  font-family: var(--font-heading);
   font-size: clamp(2.2rem, 7vw, 4rem);
   font-weight: 900;
   line-height: 0.98;
@@ -474,9 +486,55 @@
 }
 
 .landing-section--prizes {
+  position: relative;
+  overflow: hidden;
+  background-color: #000;
+}
+
+.landing-section--prizes::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("./img/gft-background-field.png");
+  background-size: cover;
+  background-position: center 38%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.landing-section--prizes::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   background:
-    radial-gradient(circle at top, rgba(255, 193, 69, 0.07), transparent 42%),
-    #000;
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.94) 0%,
+      rgba(0, 0, 0, 0.9) 18%,
+      rgba(0, 0, 0, 0.72) 34%,
+      rgba(0, 0, 0, 0.42) 52%,
+      rgba(0, 0, 0, 0.58) 72%,
+      rgba(0, 0, 0, 0.82) 100%
+    ),
+    radial-gradient(circle at 50% 46%, rgba(255, 193, 69, 0.12), transparent 42%);
+  pointer-events: none;
+}
+
+.landing-section--prizes .container {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 767px) {
+  .landing-section--prizes::before {
+    background-position: center 30%;
+  }
+}
+
+@media (min-width: 768px) {
+  .landing-section--prizes::before {
+    background-position: center 42%;
+  }
 }
 
 .landing-section--brand {
@@ -498,6 +556,7 @@
 .section-heading__eyebrow {
   display: block;
   margin-bottom: 12px;
+  font-family: var(--font-heading);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -507,6 +566,7 @@
 
 .section-heading__title {
   margin: 0;
+  font-family: var(--font-heading);
   font-size: clamp(1.75rem, 4.5vw, 2.75rem);
   font-weight: 900;
   line-height: 1.08;
@@ -648,7 +708,8 @@
   border-radius: var(--landing-radius);
   background:
     linear-gradient(180deg, rgba(255, 193, 69, 0.12), rgba(255, 255, 255, 0.02)),
-    #0a0a0a;
+    rgba(8, 8, 8, 0.88);
+  backdrop-filter: blur(10px);
   text-align: center;
 }
 
@@ -717,8 +778,9 @@
   border: 1px solid var(--landing-border);
   border-radius: var(--landing-radius);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
-    #0a0a0a;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    rgba(8, 8, 8, 0.82);
+  backdrop-filter: blur(12px);
   text-align: center;
 }
 
@@ -738,8 +800,8 @@
   order: -1;
   border-color: var(--landing-border-strong);
   background:
-    linear-gradient(180deg, rgba(255, 193, 69, 0.16), rgba(255, 255, 255, 0.02)),
-    #0a0a0a;
+    linear-gradient(180deg, rgba(255, 193, 69, 0.18), rgba(255, 255, 255, 0.03)),
+    rgba(8, 8, 8, 0.84);
   box-shadow: 0 20px 50px rgba(255, 193, 69, 0.1);
 }
 
@@ -788,7 +850,8 @@
   padding: 22px;
   border: 1px solid rgba(255, 193, 69, 0.18);
   border-radius: var(--landing-radius);
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(8, 8, 8, 0.84);
+  backdrop-filter: blur(12px);
 }
 
 .prize-leaderboard__title {
