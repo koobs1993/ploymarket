@@ -14,7 +14,7 @@
 }
 
 .landing {
-  overflow-x: hidden;
+  overflow-x: clip;
   background: #000;
   font-family: var(--font-body);
 }
@@ -545,52 +545,14 @@
 
 .landing-section--steps {
   position: relative;
-  overflow: visible;
-  padding-top: 96px;
-  padding-bottom: 96px;
   background:
-    linear-gradient(180deg, #000 0%, #141414 6%, #c9c9c4 18%, #ececea 42%, #ececea 58%, #c9c9c4 82%, #141414 94%, #000 100%);
-}
-
-.landing-section--steps::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 40%, rgba(255, 255, 255, 0.55), transparent 70%);
-  pointer-events: none;
-}
-
-.landing-section--steps::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, transparent 14%, transparent 86%, rgba(0, 0, 0, 0.55) 100%);
-  pointer-events: none;
-}
-
-.landing-section--steps .container {
-  position: relative;
-  z-index: 1;
-}
-
-.landing-section--steps .section-heading__eyebrow {
-  color: #9a7a2e;
-}
-
-.landing-section--steps .section-heading__title {
-  color: #111;
-}
-
-.landing-section--steps .section-heading__subtitle {
-  color: rgba(17, 17, 17, 0.62);
+    radial-gradient(ellipse 90% 70% at 50% -10%, rgba(255, 193, 69, 0.08), transparent 58%),
+    #000;
 }
 
 .hiw-grid {
   display: grid;
   gap: 16px;
-  overflow: visible;
 }
 
 @media (min-width: 960px) {
@@ -598,6 +560,7 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 36px;
     align-items: stretch;
+    padding-inline: 4px;
   }
 }
 
