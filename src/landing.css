@@ -264,7 +264,7 @@
   }
 
   .landing-hero__grid {
-    grid-template-columns: 1fr 1.05fr;
+    grid-template-columns: 3fr 2fr;
     gap: 48px;
   }
 }
@@ -622,12 +622,17 @@
   }
 }
 
+.hiw-grid__cell {
+  position: relative;
+  min-width: 0;
+}
+
 .hiw-card {
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
-  overflow: visible;
+  overflow: hidden;
   border: 1px solid rgba(255, 193, 69, 0.18);
   border-radius: 22px;
   background: #050505;
@@ -685,7 +690,7 @@
 }
 
 @media (min-width: 960px) {
-  .hiw-card__arrow {
+  .hiw-grid__cell .hiw-card__arrow {
     display: flex;
     align-items: center;
     justify-content: center;
