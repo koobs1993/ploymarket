@@ -80,20 +80,22 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="landing-section" id="how-it-works">
+      <section className="landing-section landing-section--steps" id="how-it-works">
         <div className="container">
           <SectionHeading
             eyebrow="How It Works"
             title="Participating Is This Easy"
             align="center"
           />
-          <div className="steps-grid steps-grid--simple">
-            {howItWorks.map((step) => (
-              <article key={step.step} className="step-card step-card--simple">
-                <span className="step-card__number">{step.step}</span>
-                <h3 className="step-card__title">{step.title}</h3>
-              </article>
-            ))}
+          <div className="steps-panel">
+            <div className="steps-grid steps-grid--simple">
+              {howItWorks.map((step) => (
+                <article key={step.step} className="step-card step-card--simple">
+                  <span className="step-card__number">{step.step}</span>
+                  <h3 className="step-card__title">{step.title}</h3>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
