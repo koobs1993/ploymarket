@@ -9,10 +9,13 @@ import { PrizeLeaderboard } from "./PrizeLeaderboard";
 import { PrizePodium } from "./PrizePodium";
 import { WorldCupHero } from "../WorldCupHero";
 import { WorldCupPredictions } from "../WorldCupPredictions";
+import { Ticker } from "../Ticker";
 import {
   EVENT_NAME,
   faqs,
   heroBenefits,
+  navLinks,
+  predictionsSection,
   prizeHeadline,
 } from "../../data/landingContent";
 
@@ -39,11 +42,18 @@ function SectionHeading({
 export function LandingPage() {
   return (
     <div className="landing">
-      <header className="landing-nav landing-nav--simple">
+      <header className="landing-nav">
         <div className="container landing-nav__inner">
           <a className="landing-nav__brand" href="#">
             <BrandLogo className="brand-logo--nav" />
           </a>
+          <nav className="landing-nav__links" aria-label="Page sections">
+            {navLinks.map((link) => (
+              <a key={link.href} className="landing-nav__link" href={link.href}>
+                {link.label}
+              </a>
+            ))}
+          </nav>
         </div>
       </header>
 
@@ -81,6 +91,8 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+
+      <Ticker />
 
       <FeaturedIn />
 
@@ -126,9 +138,9 @@ export function LandingPage() {
       <section className="landing-section landing-section--live" id="markets">
         <div className="container">
           <SectionHeading
-            eyebrow="Live markets"
-            title="Trade These World Cup Predictions"
-            subtitle="Real-time Polymarket odds. Pick your markets and compete on the leaderboard."
+            eyebrow={predictionsSection.eyebrow}
+            title={predictionsSection.title}
+            subtitle={predictionsSection.subtitle}
           />
           <div className="live-stack">
             <WorldCupPredictions />

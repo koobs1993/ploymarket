@@ -10,6 +10,19 @@ export const SIGNUP_URL = "#join";
 
 export const heroBenefits = ["No risk", "No payment"];
 
+export const navLinks = [
+  { label: "How It Works", href: "#how-it-works" },
+  { label: "Prizes", href: "#prizes" },
+  { label: "Events", href: "#markets" },
+] as const;
+
+export const predictionsSection = {
+  eyebrow: "Live markets",
+  title: "Trade These World Cup Predictions",
+  subtitle:
+    "Real-time odds. Pick your events & compete on the leaderboard. Trade on every game, every outcome, goal scorers and more!",
+};
+
 export const prizeHeadline = {
   cash: "$10K CASH",
   funding: "$1M FUNDING",

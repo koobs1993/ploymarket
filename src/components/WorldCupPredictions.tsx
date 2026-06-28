@@ -156,6 +156,8 @@ export function WorldCupPredictions() {
           <CompactCard key={market.title} market={market} />
         ))}
       </div>
+
+      <p className="predictions-more">+ many more!</p>
     </div>
   );
 }
