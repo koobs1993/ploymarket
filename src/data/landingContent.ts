@@ -1,4 +1,6 @@
 import firstPlaceIcon from "../img/1st-place.png";
+import secondPlaceIcon from "../img/2nd-place-icon.png";
+import thirdPlaceIcon from "../img/3rd-place-icon.png";
 import getFundedIcon from "../img/get-funded-icon.png";
 import joinFreeIcon from "../img/join-free-icon.png";
 import predictWinIcon from "../img/predict-win-icon.png";
@@ -37,6 +39,7 @@ export const podiumPrizes = [
     cash: "$1,500",
     account: "$100,000 account",
     tone: "silver" as const,
+    placeImage: secondPlaceIcon,
   },
   {
     place: "1",
@@ -53,6 +56,7 @@ export const podiumPrizes = [
     cash: "$1,000",
     account: "$100,000 account",
     tone: "bronze" as const,
+    placeImage: thirdPlaceIcon,
   },
 ];
 
