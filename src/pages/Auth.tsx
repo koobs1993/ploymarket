@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
 
@@ -13,11 +13,28 @@ export function AuthPage() {
   const [success, setSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  // After email confirmation, Supabase redirects here with tokens in the URL hash
+  useEffect(() => {
+    if (!window.location.hash.includes("access_token")) return;
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        window.history.replaceState(null, "", "/auth");
+        navigate("/trade", { replace: true });
+      }
+    });
+  }, [navigate]);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setSuccess(null);
+
+    const redirectTo =
+      import.meta.env.VITE_SITE_URL
+        ? `${import.meta.env.VITE_SITE_URL}/auth`
+        : `${window.location.origin}/auth`;
 
     try {
       if (isSignUp) {
@@ -26,6 +43,7 @@ export function AuthPage() {
           email,
           password,
           options: {
+            emailRedirectTo: redirectTo,
             data: {
               display_name: displayName || email.split("@")[0],
               is_admin: isAdmin,

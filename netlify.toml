@@ -5,6 +5,7 @@
 [build.environment]
   VITE_SUPABASE_URL = "https://wcrncunwkxljbbgjdgbg.supabase.co"
   VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indjcm5jdW53a3hsamJiZ2pkZ2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3MzAxMzYsImV4cCI6MjA5ODMwNjEzNn0.PaF6_mkTsKmik-xllr84m672p17yzZ5KZjvrJ2CwVrY"
+  VITE_SITE_URL = "https://goat-markets.netlify.app"
 
 # SPA fallback so client-side routes (/trade, /portfolio, /admin) work on refresh
 [[redirects]]
