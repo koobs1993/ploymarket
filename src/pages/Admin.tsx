@@ -52,26 +52,52 @@ export function AdminPage() {
 
   async function fetchTraderAccounts() {
     setLoadingAccounts(true);
+    setActionMessage(null);
     try {
-      const { data, error } = await supabase
+      const { data: accountRows, error: accountsError } = await supabase
         .from("trading_accounts")
-        .select(`
-          *,
-          profiles (
-            display_name,
-            id
-          )
-        `)
+        .select("*")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      const typedAccounts = (data || []) as unknown as TraderAccount[];
+      if (accountsError) throw accountsError;
+
+      const userIds = [...new Set((accountRows || []).map((row) => row.user_id))];
+      let profileById = new Map<string, { id: string; display_name: string }>();
+
+      if (userIds.length > 0) {
+        const { data: profileRows, error: profilesError } = await supabase
+          .from("profiles")
+          .select("id, display_name")
+          .in("id", userIds);
+
+        if (profilesError) throw profilesError;
+
+        profileById = new Map(
+          (profileRows || []).map((row) => [row.id, row]),
+        );
+      }
+
+      const typedAccounts = (accountRows || []).map((row) => ({
+        ...row,
+        cash_balance: Number(row.cash_balance),
+        starting_balance: Number(row.starting_balance),
+        profiles: profileById.get(row.user_id) ?? {
+          id: row.user_id,
+          display_name: "Trader",
+        },
+      })) as TraderAccount[];
+
       setAccounts(typedAccounts);
       if (typedAccounts.length > 0 && !selectedAccount) {
         handleSelectAccount(typedAccounts[0]);
       }
     } catch (err) {
       console.error("Error loading trader accounts:", err);
+      setActionMessage(
+        err instanceof Error
+          ? `Failed to load trader accounts: ${err.message}`
+          : "Failed to load trader accounts.",
+      );
     } finally {
       setLoadingAccounts(false);
     }
@@ -178,7 +204,15 @@ export function AdminPage() {
         </div>
 
         {actionMessage && (
-          <div className="auth-alert auth-alert--success" style={{ marginBottom: "24px" }}>
+          <div
+            className={`auth-alert ${
+              actionMessage.toLowerCase().includes("fail") ||
+              actionMessage.toLowerCase().includes("error")
+                ? "auth-alert--error"
+                : "auth-alert--success"
+            }`}
+            style={{ marginBottom: "24px" }}
+          >
             {actionMessage}
           </div>
         )}
