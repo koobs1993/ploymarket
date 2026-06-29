@@ -17,6 +17,7 @@ const FETCH_TIMEOUT_MS = 15_000;
 const FETCH_RETRIES = 3;
 
 export const TREND_TEAM_COUNT = 3;
+export const EVENT_DETAIL_TREND_COUNT = 6;
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -139,20 +140,28 @@ export async function fetchPriceHistory(
 
 export async function fetchTrendSeries(
   outcomes: WorldCupOutcome[],
+  limit = TREND_TEAM_COUNT,
 ): Promise<TrendSeries[]> {
-  const topOutcomes = outcomes.slice(0, TREND_TEAM_COUNT);
+  const series: TrendSeries[] = [];
+  let colorIndex = 0;
 
-  const histories = await Promise.all(
-    topOutcomes.map(async (outcome, index) => ({
+  for (const outcome of outcomes) {
+    if (series.length >= limit) break;
+
+    const history = await fetchPriceHistory(outcome.clobTokenId);
+    if (history.length === 0) continue;
+
+    series.push({
       id: outcome.id,
       title: outcome.title,
-      color: getCountryColor(outcome.title, index),
+      color: getCountryColor(outcome.title, colorIndex),
       clobTokenId: outcome.clobTokenId,
-      history: await fetchPriceHistory(outcome.clobTokenId),
-    })),
-  );
+      history,
+    });
+    colorIndex += 1;
+  }
 
-  return histories;
+  return series;
 }
 
 export function mergeTrendSeries(series: TrendSeries[]): TrendChartPoint[] {

@@ -3,6 +3,7 @@ import {
   applyLivePricesToChart,
   applyLivePricesToOutcomes,
   fetchEventBySlug,
+  EVENT_DETAIL_TREND_COUNT,
   fetchTrendSeries,
   mergeTrendSeries,
 } from "../api";
@@ -57,7 +58,10 @@ export function useEventMarket(eventSlug: string) {
     async function loadHistory(outcomes: WorldCupData["outcomes"]) {
       setTrendsLoading(true);
       try {
-        const nextTrends = await fetchTrendSeries(outcomes);
+        const nextTrends = await fetchTrendSeries(
+          outcomes,
+          EVENT_DETAIL_TREND_COUNT,
+        );
         if (cancelled) return;
         setBaseTrends(nextTrends);
         setBaseChartData(mergeTrendSeries(nextTrends));

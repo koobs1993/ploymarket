@@ -128,7 +128,7 @@ export function TradePage() {
     : 0;
 
   return (
-    <div style={{ backgroundColor: "#040812", minHeight: "100vh" }}>
+    <div className="trade-app" style={{ backgroundColor: "#040812", minHeight: "100vh" }}>
       <TradeHeader />
 
       <div className="trade-container">

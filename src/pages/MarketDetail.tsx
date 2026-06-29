@@ -31,8 +31,8 @@ export function MarketDetailPage() {
     null,
   );
   const [side, setSide] = useState<"yes" | "no">("yes");
-  const [stake, setStake] = useState<number>(1000);
-  const [customStake, setCustomStake] = useState("");
+  const [amountInput, setAmountInput] = useState("1000");
+  const [selectedPreset, setSelectedPreset] = useState<number>(1000);
   const [showAllOutcomes, setShowAllOutcomes] = useState(false);
   const [tradingError, setTradingError] = useState<string | null>(null);
   const [tradingSuccess, setTradingSuccess] = useState<string | null>(null);
@@ -47,7 +47,7 @@ export function MarketDetailPage() {
       : 1 - activeOutcome.price
     : 0.5;
 
-  const activeStake = customStake ? parseFloat(customStake) : stake;
+  const activeStake = parseFloat(amountInput.replace(/[^0-9.]/g, "")) || 0;
   const previewShares =
     activeOutcome && activeStake > 0 && activePrice > 0
       ? Math.floor(activeStake / activePrice)
@@ -69,7 +69,7 @@ export function MarketDetailPage() {
       return;
     }
 
-    const amount = customStake ? parseFloat(customStake) : stake;
+    const amount = activeStake;
     if (Number.isNaN(amount) || amount <= 0) {
       setTradingError("Please enter a valid stake amount.");
       return;
@@ -93,7 +93,8 @@ export function MarketDetailPage() {
         setTradingSuccess(
           `Successfully purchased ${Number(result.shares).toLocaleString()} shares!`,
         );
-        setCustomStake("");
+        setAmountInput("1000");
+        setSelectedPreset(1000);
         await refreshAccount();
       }
     } catch (err) {
@@ -114,7 +115,7 @@ export function MarketDetailPage() {
   }
 
   return (
-    <div style={{ backgroundColor: "#040812", minHeight: "100vh" }}>
+    <div className="trade-app" style={{ backgroundColor: "#040812", minHeight: "100vh" }}>
       <TradeHeader />
 
       <div className="trade-container">
@@ -312,17 +313,22 @@ export function MarketDetailPage() {
 
                     <form onSubmit={handlePlaceBet} className="auth-form">
                       <label className="market-detail-amount">
-                        <span>Amount</span>
-                        <input
-                          type="number"
-                          placeholder="$0"
-                          value={customStake}
-                          onChange={(e) => {
-                            setCustomStake(e.target.value);
-                            setTradingError(null);
-                            setTradingSuccess(null);
-                          }}
-                        />
+                        <span className="market-detail-amount__label">Amount</span>
+                        <div className="market-detail-amount__field">
+                          <span className="market-detail-amount__currency">$</span>
+                          <input
+                            type="text"
+                            inputMode="decimal"
+                            placeholder="0"
+                            value={amountInput}
+                            onChange={(e) => {
+                              setAmountInput(e.target.value.replace(/[^0-9.]/g, ""));
+                              setSelectedPreset(0);
+                              setTradingError(null);
+                              setTradingSuccess(null);
+                            }}
+                          />
+                        </div>
                       </label>
 
                       <div className="wc-stake-options">
@@ -330,10 +336,10 @@ export function MarketDetailPage() {
                           <button
                             key={amount}
                             type="button"
-                            className={`wc-stake-option ${stake === amount && !customStake ? "wc-stake-option--active" : ""}`}
+                            className={`wc-stake-option ${selectedPreset === amount ? "wc-stake-option--active" : ""}`}
                             onClick={() => {
-                              setStake(amount);
-                              setCustomStake("");
+                              setAmountInput(String(amount));
+                              setSelectedPreset(amount);
                               setTradingError(null);
                               setTradingSuccess(null);
                             }}
@@ -356,7 +362,7 @@ export function MarketDetailPage() {
                               <div className="wc-result-label">Profit If Wins</div>
                               <div
                                 className="wc-result-value"
-                                style={{ color: "#22c55e" }}
+                                style={{ color: "var(--gold)" }}
                               >
                                 $
                                 {previewProfit.toLocaleString("en-US", {
@@ -387,7 +393,7 @@ export function MarketDetailPage() {
                           !tradingAccount ||
                           tradingAccount.status !== "active"
                         }
-                        className="auth-button"
+                        className="auth-button auth-button--gold"
                       >
                         {executingTrade
                           ? "Executing Trade…"
