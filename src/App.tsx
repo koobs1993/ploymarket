@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { LandingPage } from "./components/landing/LandingPage";
 import { AuthPage } from "./pages/Auth";
 import { TradePage } from "./pages/Trade";
+import { MarketDetailPage } from "./pages/MarketDetail";
 import { PortfolioPage } from "./pages/Portfolio";
 import { AdminPage } from "./pages/Admin";
 import "./index.css";
@@ -73,6 +74,14 @@ export function App() {
                   <TradePage />
                 </ProtectedRoute>
               } 
+            />
+            <Route
+              path="/trade/:eventSlug"
+              element={
+                <ProtectedRoute>
+                  <MarketDetailPage />
+                </ProtectedRoute>
+              }
             />
             <Route 
               path="/portfolio" 

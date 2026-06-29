@@ -3,6 +3,38 @@ import { secondaryMarketSlugs } from "../data/landingContent";
 import { buildApiUrl } from "../api";
 
 export async function syncMarkets(): Promise<{ success: boolean; count: number; error?: string }> {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session?.access_token) {
+    try {
+      const response = await fetch("/.netlify/functions/sync-markets", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const payload = await response.json();
+
+      if (response.ok && payload.success) {
+        return { success: true, count: payload.count ?? 0 };
+      }
+
+      if (response.status !== 500 || !payload.error?.includes("configuration")) {
+        return {
+          success: false,
+          count: 0,
+          error: payload.error || `Sync failed (${response.status})`,
+        };
+      }
+    } catch {
+      // Fall through to direct sync in dev when function is unavailable.
+    }
+  }
+
   const slugs = ["world-cup-winner", ...secondaryMarketSlugs];
   let count = 0;
 
@@ -26,52 +58,43 @@ export async function syncMarkets(): Promise<{ success: boolean; count: number; 
       const event = events[0];
       if (!event || !event.markets) continue;
 
-      const marketsToUpsert = event.markets.map((m: any) => {
+      for (const m of event.markets) {
         let prices = [0.5, 0.5];
         let tokenIds = ["", ""];
         try {
           if (m.outcomePrices) {
-            prices = JSON.parse(m.outcomePrices).map((p: string) => parseFloat(p) || 0);
+            prices = JSON.parse(m.outcomePrices).map(
+              (p: string) => parseFloat(p) || 0,
+            );
           }
           if (m.clobTokenIds) {
             tokenIds = JSON.parse(m.clobTokenIds);
           }
-        } catch (e) {
+        } catch {
           // ignore parsing error
         }
 
         const yesPrice = prices[0] !== undefined ? prices[0] : 0.5;
-        const noPrice = prices[1] !== undefined ? prices[1] : (1 - yesPrice);
+        const noPrice = prices[1] !== undefined ? prices[1] : 1 - yesPrice;
 
-        return {
-          polymarket_id: m.id,
-          event_slug: slug,
-          slug: m.slug || "",
-          question: m.question || "",
-          group_title: m.groupItemTitle || null,
-          outcomes: {
-            tokenIds,
-            prices,
-          },
-          yes_price: yesPrice,
-          no_price: noPrice,
-          end_date: m.endDate || event.endDate || new Date().toISOString(),
-          closed: m.closed || false,
-          uma_resolution_status: m.umaResolutionStatus || null,
-          last_synced_at: new Date().toISOString(),
-        };
-      });
-
-      if (marketsToUpsert.length > 0) {
-        const { error } = await supabase
-          .from("markets")
-          .upsert(marketsToUpsert);
+        const { error } = await supabase.rpc("register_market", {
+          p_polymarket_id: m.id,
+          p_event_slug: slug,
+          p_slug: m.slug || "",
+          p_question: m.question || "",
+          p_group_title: m.groupItemTitle || null,
+          p_yes_price: yesPrice,
+          p_no_price: noPrice,
+          p_end_date: m.endDate || event.endDate || new Date().toISOString(),
+          p_closed: m.closed || false,
+          p_outcomes: { tokenIds, prices },
+        });
 
         if (error) {
-          console.error(`Error upserting markets for ${slug}:`, error);
+          console.error(`Error registering market for ${slug}:`, error);
           throw error;
         }
-        count += marketsToUpsert.length;
+        count += 1;
       }
     }
 
@@ -89,8 +112,6 @@ export async function syncMarkets(): Promise<{ success: boolean; count: number; 
 export async function settleMarkets(): Promise<{ success: boolean; settledCount: number; error?: string }> {
   let settledCount = 0;
   try {
-    // 1. Find markets in public.markets where closed = false (or we check open positions)
-    // Actually, let's fetch active markets from Supabase
     const { data: openMarkets, error: marketsError } = await supabase
       .from("markets")
       .select("*")
@@ -101,10 +122,8 @@ export async function settleMarkets(): Promise<{ success: boolean; settledCount:
       return { success: true, settledCount: 0 };
     }
 
-    // 2. Query each open market's live state from Polymarket Gamma API to see if it is resolved
     for (const market of openMarkets) {
-      // Gamma allows querying single market by id: GET /markets/:id
-      const url = `${import.meta.env.DEV ? 'https://gamma-api.polymarket.com' : '/.netlify/functions/polymarket?service=gamma&path='}markets/${market.polymarket_id}`;
+      const url = `${import.meta.env.DEV ? "https://gamma-api.polymarket.com" : "/.netlify/functions/polymarket?service=gamma&path="}markets/${market.polymarket_id}`;
 
       const response = await fetch(url, {
         headers: { Accept: "application/json" },
@@ -116,13 +135,18 @@ export async function settleMarkets(): Promise<{ success: boolean; settledCount:
       }
 
       const m = await response.json();
-      // A market is fully resolved if closed = true AND umaResolutionStatus is settled_normal or voided
-      if (m && m.closed && (m.umaResolutionStatus === "settled_normal" || m.umaResolutionStatus === "voided")) {
+      if (
+        m &&
+        m.closed &&
+        (m.umaResolutionStatus === "settled_normal" ||
+          m.umaResolutionStatus === "voided")
+      ) {
         let winningSide: "yes" | "no" | "void" = "void";
 
         if (m.umaResolutionStatus === "settled_normal" && m.outcomePrices) {
-          const prices = JSON.parse(m.outcomePrices).map((p: string) => parseFloat(p) || 0);
-          // Yes is index 0, No is index 1
+          const prices = JSON.parse(m.outcomePrices).map(
+            (p: string) => parseFloat(p) || 0,
+          );
           if (prices[0] >= 0.99) {
             winningSide = "yes";
           } else if (prices[1] >= 0.99) {
@@ -130,17 +154,21 @@ export async function settleMarkets(): Promise<{ success: boolean; settledCount:
           }
         }
 
-        // Call the database function to settle positions for this market
-        const { data, error: rpcError } = await supabase.rpc("settle_positions_for_market", {
-          p_market_id: market.polymarket_id,
-          p_winning_side: winningSide,
-        });
+        const { data, error: rpcError } = await supabase.rpc(
+          "settle_positions_for_market",
+          {
+            p_market_id: market.polymarket_id,
+            p_winning_side: winningSide,
+          },
+        );
 
         if (rpcError) {
-          console.error(`Error settling positions for market ${market.polymarket_id}:`, rpcError);
+          console.error(
+            `Error settling positions for market ${market.polymarket_id}:`,
+            rpcError,
+          );
         } else {
-          settledCount += (data?.positions_settled || 0);
-          console.log(`Successfully settled market ${market.polymarket_id}. Winning side: ${winningSide}. Positions settled: ${data?.positions_settled}`);
+          settledCount += data?.positions_settled || 0;
         }
       }
     }
