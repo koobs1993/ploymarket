@@ -4,14 +4,7 @@ import { TRADE_EVENT_SLUGS } from "../constants/markets";
 import { useAuth } from "../context/AuthContext";
 import { EventCatalog } from "../components/EventCatalog";
 import { TradeHeader } from "../components/TradeHeader";
-import { supabase } from "../lib/supabase";
 import type { TradeEventSummary } from "../types";
-
-interface DailyStats {
-  opening_equity: number;
-  lowest_equity: number;
-  realized_pnl: number;
-}
 
 export function TradePage() {
   const { tradingAccount } = useAuth();
@@ -19,7 +12,6 @@ export function TradePage() {
   const [matchEvents, setMatchEvents] = useState<TradeEventSummary[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [dailyStats, setDailyStats] = useState<DailyStats | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -66,65 +58,6 @@ export function TradePage() {
     };
   }, []);
 
-  useEffect(() => {
-    if (tradingAccount) {
-      fetchDailyStats();
-    }
-  }, [tradingAccount?.id]);
-
-  async function fetchDailyStats() {
-    if (!tradingAccount) return;
-    try {
-      const todayStr = new Date().toISOString().split("T")[0];
-      const { data, error } = await supabase
-        .from("account_daily_stats")
-        .select("*")
-        .eq("account_id", tradingAccount.id)
-        .eq("date", todayStr)
-        .maybeSingle();
-
-      if (error) throw error;
-      if (data) {
-        setDailyStats({
-          opening_equity: Number(data.opening_equity),
-          lowest_equity: Number(data.lowest_equity),
-          realized_pnl: Number(data.realized_pnl),
-        });
-      } else {
-        setDailyStats(null);
-      }
-    } catch (err) {
-      console.error("Error loading daily stats:", err);
-    }
-  }
-
-  const maxTotalLoss = 10000;
-  const maxDailyLoss = 5000;
-  const startBalance = tradingAccount?.starting_balance || 100000;
-  const currentEquity = tradingAccount?.equity || startBalance;
-  const totalMinEquity = startBalance - maxTotalLoss;
-  const totalDrawdownRemaining = Math.max(0, currentEquity - totalMinEquity);
-  const totalBufferPercent = Math.min(
-    100,
-    Math.max(0, (totalDrawdownRemaining / maxTotalLoss) * 100),
-  );
-  const dailyOpeningEquity = dailyStats?.opening_equity || currentEquity;
-  const dailyMinEquity = dailyOpeningEquity - maxDailyLoss;
-  const dailyDrawdownRemaining = Math.max(0, currentEquity - dailyMinEquity);
-  const dailyBufferPercent = Math.min(
-    100,
-    Math.max(0, (dailyDrawdownRemaining / maxDailyLoss) * 100),
-  );
-  const daysRemaining = tradingAccount
-    ? Math.max(
-        0,
-        Math.ceil(
-          (new Date(tradingAccount.expires_at).getTime() - Date.now()) /
-            (1000 * 60 * 60 * 24),
-        ),
-      )
-    : 0;
-
   return (
     <div className="trade-app" style={{ backgroundColor: "#040812", minHeight: "100vh" }}>
       <TradeHeader />
@@ -167,151 +100,7 @@ export function TradePage() {
           </div>
         )}
 
-        {tradingAccount && (
-          <div className="stats-card">
-            <div className="metrics-grid">
-              <div className="metric-item">
-                <div className="metric-item__label">Cash Balance</div>
-                <div className="metric-item__value">
-                  $
-                  {tradingAccount.cash_balance.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </div>
-              </div>
-              <div className="metric-item">
-                <div className="metric-item__label">Account Equity</div>
-                <div
-                  className="metric-item__value"
-                  style={{ color: "#3b82f6" }}
-                >
-                  $
-                  {tradingAccount.equity.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </div>
-              </div>
-              <div className="metric-item">
-                <div className="metric-item__label">Open Positions Value</div>
-                <div
-                  className="metric-item__value"
-                  style={{ color: "#f59e0b" }}
-                >
-                  $
-                  {tradingAccount.open_positions_value.toLocaleString(
-                    "en-US",
-                    { minimumFractionDigits: 2, maximumFractionDigits: 2 },
-                  )}
-                </div>
-              </div>
-              <div className="metric-item">
-                <div className="metric-item__label">Today's Realized P&L</div>
-                <div
-                  className={`metric-item__value ${dailyStats && dailyStats.realized_pnl > 0 ? "metric-item__value--positive" : dailyStats && dailyStats.realized_pnl < 0 ? "metric-item__value--negative" : ""}`}
-                >
-                  {dailyStats && dailyStats.realized_pnl !== 0
-                    ? `${dailyStats.realized_pnl > 0 ? "+" : ""}$${dailyStats.realized_pnl.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                    : "$0.00"}
-                </div>
-              </div>
-            </div>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                gap: "24px",
-              }}
-            >
-              <div className="rules-list">
-                <div className="rule-progress">
-                  <div className="rule-progress__header">
-                    <span className="rule-progress__label">
-                      Total Drawdown Limit (Max -$10K)
-                    </span>
-                    <span className="rule-progress__value">
-                      $
-                      {totalDrawdownRemaining.toLocaleString("en-US", {
-                        maximumFractionDigits: 0,
-                      })}{" "}
-                      buffer
-                    </span>
-                  </div>
-                  <div className="rule-progress__bar-bg">
-                    <div
-                      className={`rule-progress__bar-fill ${totalBufferPercent < 30 ? "rule-progress__bar-fill--danger" : totalBufferPercent < 60 ? "rule-progress__bar-fill--warning" : ""}`}
-                      style={{ width: `${totalBufferPercent}%` }}
-                    />
-                  </div>
-                </div>
-
-                <div className="rule-progress">
-                  <div className="rule-progress__header">
-                    <span className="rule-progress__label">
-                      Daily Drawdown Limit (Max -$5K)
-                    </span>
-                    <span className="rule-progress__value">
-                      $
-                      {dailyDrawdownRemaining.toLocaleString("en-US", {
-                        maximumFractionDigits: 0,
-                      })}{" "}
-                      buffer
-                    </span>
-                  </div>
-                  <div className="rule-progress__bar-bg">
-                    <div
-                      className={`rule-progress__bar-fill ${dailyBufferPercent < 30 ? "rule-progress__bar-fill--danger" : dailyBufferPercent < 60 ? "rule-progress__bar-fill--warning" : ""}`}
-                      style={{ width: `${dailyBufferPercent}%` }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  gap: "8px",
-                  borderLeft: "1px solid #1f2937",
-                  paddingLeft: "24px",
-                }}
-              >
-                <div>
-                  <span
-                    style={{
-                      fontSize: "12px",
-                      color: "#9ca3af",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Time Remaining
-                  </span>
-                  <div
-                    style={{
-                      fontSize: "28px",
-                      fontWeight: "bold",
-                      fontFamily: "var(--font-heading)",
-                    }}
-                  >
-                    {daysRemaining}{" "}
-                    <span style={{ fontSize: "16px", color: "#9ca3af" }}>
-                      Days
-                    </span>
-                  </div>
-                </div>
-                <div style={{ fontSize: "12px", color: "#9ca3af" }}>
-                  Active Challenge ends:{" "}
-                  {new Date(tradingAccount.expires_at).toLocaleDateString()}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div style={{ marginTop: "32px" }}>
+        <div>
           <h2 className="markets-section-title">World Cup Matches</h2>
           <p className="markets-section-desc">
             Individual FIFA World Cup games with live win and draw markets from

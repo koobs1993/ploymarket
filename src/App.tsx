@@ -6,6 +6,8 @@ import { AuthPage } from "./pages/Auth";
 import { TradePage } from "./pages/Trade";
 import { MarketDetailPage } from "./pages/MarketDetail";
 import { PortfolioPage } from "./pages/Portfolio";
+import { AccountPage } from "./pages/Account";
+import { ProfilePage } from "./pages/Profile";
 import { AdminPage } from "./pages/Admin";
 import "./index.css";
 import "./landing.css";
@@ -90,6 +92,22 @@ export function App() {
                   <PortfolioPage />
                 </ProtectedRoute>
               } 
+            />
+            <Route
+              path="/account"
+              element={
+                <ProtectedRoute>
+                  <AccountPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
             />
             <Route 
               path="/admin" 

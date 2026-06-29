@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
+import { BrandLogo } from "../components/landing/BrandLogo";
 
 const DEFAULT_ADMIN_EMAIL = "admin@goatfunded.com";
 
@@ -90,8 +91,7 @@ export function AuthPage() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-logo">
-          <span className="logo-goat">Goat</span>
-          <span className="logo-funded">Funded</span>
+          <BrandLogo className="brand-logo--auth" />
           <span className="logo-badge">World Cup</span>
         </div>
 
