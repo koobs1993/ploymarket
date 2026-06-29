@@ -123,15 +123,27 @@ function isWorldCupMatchSlug(slug: string): boolean {
 async function fetchSeriesEvents(seriesId: string): Promise<PolymarketEvent[]> {
   const allEvents: PolymarketEvent[] = [];
 
-  for (let offset = 0; offset < 2000; offset += 100) {
+  for (let offset = 0; offset < 1000; offset += 100) {
     const params = new URLSearchParams({
       series_id: seriesId,
       limit: "100",
       offset: String(offset),
+      active: "true",
+      closed: "false",
     });
-    const response = await fetchWithRetry(buildApiUrl("gamma", "events", params));
-    const batch: PolymarketEvent[] = await response.json();
-    if (!batch.length) break;
+
+    let batch: PolymarketEvent[];
+    try {
+      const response = await fetchWithRetry(buildApiUrl("gamma", "events", params));
+      batch = await response.json();
+    } catch (err) {
+      // A single failed page (e.g. upstream 502/timeout) shouldn't sink the
+      // whole list — return whatever we've collected so far.
+      console.error("Failed to load a page of series events:", err);
+      break;
+    }
+
+    if (!Array.isArray(batch) || !batch.length) break;
     allEvents.push(...batch);
     if (batch.length < 100) break;
   }
@@ -139,11 +151,27 @@ async function fetchSeriesEvents(seriesId: string): Promise<PolymarketEvent[]> {
   return allEvents;
 }
 
-export async function fetchWorldCupMatchEvents(): Promise<TradeEventSummary[]> {
+async function fetchWorldCupMatchRawEvents(): Promise<PolymarketEvent[]> {
+  // In production the listing payload is far larger than Netlify's function
+  // response cap, so a dedicated function downloads and filters server-side and
+  // returns only the slim set of match events.
+  if (!import.meta.env.DEV) {
+    const response = await fetchWithRetry("/.netlify/functions/worldcup-matches");
+    const events: PolymarketEvent[] = await response.json();
+    return events;
+  }
+
   const events = await fetchSeriesEvents(FIFA_WC_SERIES_ID);
+  return events.filter(
+    (event) => event.slug && isWorldCupMatchSlug(event.slug) && !event.closed,
+  );
+}
+
+export async function fetchWorldCupMatchEvents(): Promise<TradeEventSummary[]> {
+  const events = await fetchWorldCupMatchRawEvents();
 
   return events
-    .filter((event) => event.slug && isWorldCupMatchSlug(event.slug) && !event.closed)
+    .filter((event) => event.slug)
     .sort(
       (a, b) =>
         new Date(a.endDate).getTime() - new Date(b.endDate).getTime(),

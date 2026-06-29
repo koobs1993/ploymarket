@@ -47,9 +47,13 @@ export async function handler(event: {
   const query = params.toString();
   const url = `${ALLOWED_ORIGINS[service]}/${path}${query ? `?${query}` : ""}`;
 
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 9_000);
+
   try {
     const response = await fetch(url, {
       headers: { Accept: "application/json" },
+      signal: controller.signal,
     });
 
     const body = await response.text();
@@ -63,11 +67,16 @@ export async function handler(event: {
       },
       body,
     };
-  } catch {
+  } catch (err) {
+    const aborted = err instanceof Error && err.name === "AbortError";
     return {
-      statusCode: 502,
+      statusCode: aborted ? 504 : 502,
       headers: CORS_HEADERS,
-      body: JSON.stringify({ error: "Upstream request failed" }),
+      body: JSON.stringify({
+        error: aborted ? "Upstream request timed out" : "Upstream request failed",
+      }),
     };
+  } finally {
+    clearTimeout(timer);
   }
 }
