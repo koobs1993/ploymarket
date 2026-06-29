@@ -2,6 +2,14 @@ import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
 
+const DEFAULT_ADMIN_EMAIL = "admin@goatfunded.com";
+
+function normalizeLoginEmail(value: string): string {
+  const trimmed = value.trim();
+  if (trimmed.includes("@")) return trimmed;
+  return `${trimmed}@goatfunded.com`;
+}
+
 export function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
@@ -60,9 +68,8 @@ export function AuthPage() {
           setSuccess("Sign up successful! Please check your email for confirmation (if enabled) or try logging in.");
         }
       } else {
-        // Sign In
         const { error } = await supabase.auth.signInWithPassword({
-          email,
+          email: normalizeLoginEmail(email),
           password,
         });
 
@@ -90,9 +97,9 @@ export function AuthPage() {
 
         <h2 className="auth-title">{isSignUp ? "Create Your Trading Account" : "Sign In to Your Challenge"}</h2>
         <p className="auth-subtitle">
-          {isSignUp 
-            ? "Get $100,000 in simulated capital and compete for funding" 
-            : "Monitor your equity, manage trades, and check rules"}
+          {isSignUp
+            ? "Get $100,000 in simulated capital and compete for funding"
+            : `Monitor your equity, manage trades, and check rules. Default admin: admin / password123 (${DEFAULT_ADMIN_EMAIL})`}
         </p>
 
         {error && <div className="auth-alert auth-alert--error">{error}</div>}
@@ -114,11 +121,13 @@ export function AuthPage() {
           )}
 
           <div className="auth-group">
-            <label className="auth-label">Email Address</label>
+            <label className="auth-label">
+              {isSignUp ? "Email Address" : "Email or Username"}
+            </label>
             <input
-              type="email"
+              type="text"
               className="auth-input"
-              placeholder="trader@goatfunded.com"
+              placeholder={isSignUp ? "trader@goatfunded.com" : "admin or trader@goatfunded.com"}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

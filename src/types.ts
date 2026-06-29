@@ -13,16 +13,28 @@ export interface PolymarketMarket {
 }
 
 export interface PolymarketEvent {
+  slug?: string;
   title: string;
   endDate: string;
   icon: string;
   image: string;
   volume: number | string;
+  closed?: boolean;
   description?: string;
   eventMetadata?: {
     context_description?: string;
   };
   markets?: PolymarketMarket[];
+}
+
+export interface TradeEventSummary {
+  slug: string;
+  title: string;
+  endDate: string;
+  icon: string;
+  volume: number;
+  description: string;
+  outcomes: WorldCupOutcome[];
 }
 
 export interface WorldCupOutcome {

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { fetchEventBySlug } from "../api";
+import { fetchEventBySlug, fetchWorldCupMatchEvents } from "../api";
 import { TRADE_EVENT_SLUGS } from "../constants/markets";
 import { useAuth } from "../context/AuthContext";
+import { EventCatalog } from "../components/EventCatalog";
 import { TradeHeader } from "../components/TradeHeader";
 import { supabase } from "../lib/supabase";
-import type { WorldCupData } from "../types";
+import type { TradeEventSummary } from "../types";
 
 interface DailyStats {
   opening_equity: number;
@@ -13,26 +13,10 @@ interface DailyStats {
   realized_pnl: number;
 }
 
-interface EventSummary extends WorldCupData {
-  slug: string;
-}
-
-function formatVolume(volume: number): string {
-  if (volume >= 1_000_000_000) {
-    return `$${(volume / 1_000_000_000).toFixed(2)}B`;
-  }
-  if (volume >= 1_000_000) {
-    return `$${(volume / 1_000_000).toFixed(1)}M`;
-  }
-  if (volume >= 1_000) {
-    return `$${(volume / 1_000).toFixed(0)}K`;
-  }
-  return `$${volume.toFixed(0)}`;
-}
-
 export function TradePage() {
   const { tradingAccount } = useAuth();
-  const [events, setEvents] = useState<EventSummary[]>([]);
+  const [futuresEvents, setFuturesEvents] = useState<TradeEventSummary[]>([]);
+  const [matchEvents, setMatchEvents] = useState<TradeEventSummary[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [dailyStats, setDailyStats] = useState<DailyStats | null>(null);
@@ -44,13 +28,27 @@ export function TradePage() {
       setLoadingEvents(true);
       setLoadError(null);
       try {
-        const results = await Promise.all(
-          TRADE_EVENT_SLUGS.map(async (slug) => {
-            const data = await fetchEventBySlug(slug);
-            return { ...data, slug };
-          }),
-        );
-        if (!cancelled) setEvents(results);
+        const [futures, matches] = await Promise.all([
+          Promise.all(
+            TRADE_EVENT_SLUGS.map(async (slug) => {
+              const data = await fetchEventBySlug(slug);
+              return {
+                slug,
+                title: data.title,
+                endDate: data.endDate,
+                icon: data.icon,
+                volume: data.volume,
+                description: data.description,
+                outcomes: data.outcomes,
+              };
+            }),
+          ),
+          fetchWorldCupMatchEvents(),
+        ]);
+        if (!cancelled) {
+          setFuturesEvents(futures);
+          setMatchEvents(matches);
+        }
       } catch (err) {
         if (!cancelled) {
           setLoadError(
@@ -314,87 +312,35 @@ export function TradePage() {
         )}
 
         <div style={{ marginTop: "32px" }}>
-          <h2 className="markets-section-title">World Cup Markets</h2>
-          <p
-            style={{
-              color: "#9ca3af",
-              fontSize: "14px",
-              margin: "0 0 24px 0",
-            }}
-          >
-            Live odds from Polymarket. Select a market to view outcomes and place
-            a trade.
+          <h2 className="markets-section-title">World Cup Matches</h2>
+          <p className="markets-section-desc">
+            Individual FIFA World Cup games with live win and draw markets from
+            Polymarket.
           </p>
 
           {loadingEvents ? (
-            <div
-              style={{
-                padding: "40px",
-                textAlign: "center",
-                color: "#9ca3af",
-              }}
-            >
-              Loading markets from Polymarket…
-            </div>
+            <div className="markets-loading">Loading markets from Polymarket…</div>
           ) : loadError ? (
             <div className="auth-alert auth-alert--error">{loadError}</div>
-          ) : (
-            <div className="event-catalog">
-              {events.map((event) => {
-                const topOutcomes = event.outcomes.slice(0, 3);
-                return (
-                  <Link
-                    key={event.slug}
-                    to={`/trade/${event.slug}`}
-                    className="event-card"
-                  >
-                    <div className="event-card__header">
-                      {event.icon && (
-                        <img
-                          src={event.icon}
-                          alt=""
-                          className="event-card__icon"
-                        />
-                      )}
-                      <div className="event-card__meta">
-                        <h3 className="event-card__title">{event.title}</h3>
-                        <div className="event-card__stats">
-                          <span>{formatVolume(event.volume)} Vol.</span>
-                          <span>•</span>
-                          <span>
-                            {new Date(event.endDate).toLocaleDateString(
-                              "en-US",
-                              {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              },
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {topOutcomes.length > 0 && (
-                      <ul className="event-card__outcomes">
-                        {topOutcomes.map((outcome) => (
-                          <li key={outcome.id}>
-                            <span className="event-card__outcome-name">
-                              {outcome.title}
-                            </span>
-                            <span className="event-card__outcome-odds">
-                              {outcome.odds.toFixed(0)}%
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-
-                    <div className="event-card__cta">View market →</div>
-                  </Link>
-                );
-              })}
+          ) : matchEvents.length === 0 ? (
+            <div className="markets-empty">
+              No upcoming World Cup match markets are open right now.
             </div>
+          ) : (
+            <EventCatalog events={matchEvents} matchLayout />
+          )}
+
+          <h2 className="markets-section-title" style={{ marginTop: "40px" }}>
+            Futures & Special Markets
+          </h2>
+          <p className="markets-section-desc">
+            Tournament winners, awards, and other World Cup futures.
+          </p>
+
+          {loadingEvents ? (
+            <div className="markets-loading">Loading markets from Polymarket…</div>
+          ) : loadError ? null : (
+            <EventCatalog events={futuresEvents} />
           )}
         </div>
       </div>

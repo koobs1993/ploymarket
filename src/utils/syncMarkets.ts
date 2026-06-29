@@ -1,6 +1,6 @@
-import { supabase } from "../lib/supabase";
+import { buildApiUrl, fetchWorldCupMatchSlugs } from "../api";
 import { secondaryMarketSlugs } from "../data/landingContent";
-import { buildApiUrl } from "../api";
+import { supabase } from "../lib/supabase";
 
 export async function syncMarkets(): Promise<{ success: boolean; count: number; error?: string }> {
   const {
@@ -35,7 +35,11 @@ export async function syncMarkets(): Promise<{ success: boolean; count: number; 
     }
   }
 
-  const slugs = ["world-cup-winner", ...secondaryMarketSlugs];
+  const slugs = [
+    "world-cup-winner",
+    ...secondaryMarketSlugs,
+    ...(await fetchWorldCupMatchSlugs()),
+  ];
   let count = 0;
 
   try {

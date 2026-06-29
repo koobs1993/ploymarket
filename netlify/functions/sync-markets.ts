@@ -7,21 +7,61 @@ const CORS_HEADERS = {
 };
 
 const GAMMA_HOST = "https://gamma-api.polymarket.com";
-const EVENT_SLUGS = [
+const FIFA_WC_SERIES_ID = "11433";
+const BASE_EVENT_SLUGS = [
   "world-cup-winner",
   "world-cup-golden-glove-winner-20260603195306910",
   "world-cup-nation-to-reach-final",
 ];
+const MATCH_SLUG_PATTERN =
+  /^fifwc-[a-z0-9]{2,4}-[a-z0-9]{2,4}-\d{4}-\d{2}-\d{2}$/;
 
 function gammaUrl(slug: string): string {
   const params = new URLSearchParams({ slug, active: "true" });
   return `${GAMMA_HOST}/events?${params.toString()}`;
 }
 
+async function fetchWorldCupMatchSlugs(): Promise<string[]> {
+  const slugs: string[] = [];
+
+  for (let offset = 0; offset < 2000; offset += 100) {
+    const params = new URLSearchParams({
+      series_id: FIFA_WC_SERIES_ID,
+      limit: "100",
+      offset: String(offset),
+    });
+    const response = await fetch(`${GAMMA_HOST}/events?${params.toString()}`, {
+      headers: { Accept: "application/json" },
+    });
+    if (!response.ok) break;
+
+    const batch = await response.json();
+    if (!Array.isArray(batch) || batch.length === 0) break;
+
+    for (const event of batch) {
+      const slug = String(event.slug || "");
+      if (
+        MATCH_SLUG_PATTERN.test(slug) &&
+        !event.closed &&
+        !slug.includes("halftime") &&
+        !slug.includes("exact-score") &&
+        !slug.includes("more-markets")
+      ) {
+        slugs.push(slug);
+      }
+    }
+
+    if (batch.length < 100) break;
+  }
+
+  return slugs;
+}
+
 async function syncAllMarkets(serviceClient: ReturnType<typeof createClient>) {
   let count = 0;
+  const eventSlugs = [...BASE_EVENT_SLUGS, ...(await fetchWorldCupMatchSlugs())];
 
-  for (const slug of EVENT_SLUGS) {
+  for (const slug of eventSlugs) {
     const response = await fetch(gammaUrl(slug), {
       headers: { Accept: "application/json" },
     });

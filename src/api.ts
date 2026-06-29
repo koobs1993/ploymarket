@@ -1,8 +1,13 @@
+import {
+  FIFA_WC_SERIES_ID,
+  WORLD_CUP_MATCH_SLUG_PATTERN,
+} from "./constants/markets";
 import type {
   BetResult,
   PolymarketEvent,
   PolymarketMarket,
   PriceHistoryPoint,
+  TradeEventSummary,
   TrendChartPoint,
   TrendSeries,
   WorldCupData,
@@ -87,6 +92,70 @@ export async function fetchWorldCupData(): Promise<WorldCupData> {
   return fetchEventBySlug(WORLD_CUP_EVENT_SLUG);
 }
 
+function parseEventSummary(event: PolymarketEvent, slug: string): TradeEventSummary {
+  const outcomes = (event.markets ?? [])
+    .map((market) => toOutcome(market))
+    .filter((item): item is WorldCupOutcome => item !== null)
+    .filter((outcome) => !isPlaceholderOutcome(outcome))
+    .sort((a, b) => b.odds - a.odds);
+
+  return {
+    slug,
+    title: event.title.trim(),
+    endDate: event.endDate,
+    icon: event.icon || event.image,
+    volume: Number(event.volume) || 0,
+    description:
+      event.eventMetadata?.context_description?.trim() ||
+      event.description?.trim() ||
+      "",
+    outcomes,
+  };
+}
+
+function isWorldCupMatchSlug(slug: string): boolean {
+  if (!WORLD_CUP_MATCH_SLUG_PATTERN.test(slug)) return false;
+  return !slug.includes("halftime") &&
+    !slug.includes("exact-score") &&
+    !slug.includes("more-markets");
+}
+
+async function fetchSeriesEvents(seriesId: string): Promise<PolymarketEvent[]> {
+  const allEvents: PolymarketEvent[] = [];
+
+  for (let offset = 0; offset < 2000; offset += 100) {
+    const params = new URLSearchParams({
+      series_id: seriesId,
+      limit: "100",
+      offset: String(offset),
+    });
+    const response = await fetchWithRetry(buildApiUrl("gamma", "events", params));
+    const batch: PolymarketEvent[] = await response.json();
+    if (!batch.length) break;
+    allEvents.push(...batch);
+    if (batch.length < 100) break;
+  }
+
+  return allEvents;
+}
+
+export async function fetchWorldCupMatchEvents(): Promise<TradeEventSummary[]> {
+  const events = await fetchSeriesEvents(FIFA_WC_SERIES_ID);
+
+  return events
+    .filter((event) => event.slug && isWorldCupMatchSlug(event.slug) && !event.closed)
+    .sort(
+      (a, b) =>
+        new Date(a.endDate).getTime() - new Date(b.endDate).getTime(),
+    )
+    .map((event) => parseEventSummary(event, event.slug!));
+}
+
+export async function fetchWorldCupMatchSlugs(): Promise<string[]> {
+  const events = await fetchWorldCupMatchEvents();
+  return events.map((event) => event.slug);
+}
+
 export async function fetchEventBySlug(slug: string): Promise<WorldCupData> {
   const params = new URLSearchParams({
     slug,
@@ -102,22 +171,14 @@ export async function fetchEventBySlug(slug: string): Promise<WorldCupData> {
     throw new Error("Market not found");
   }
 
-  const outcomes = (event.markets ?? [])
-    .map((market) => toOutcome(market))
-    .filter((item): item is WorldCupOutcome => item !== null)
-    .filter((outcome) => !isPlaceholderOutcome(outcome))
-    .sort((a, b) => b.odds - a.odds);
-
+  const summary = parseEventSummary(event, slug);
   return {
-    title: event.title.trim(),
-    endDate: event.endDate,
-    icon: event.icon || event.image,
-    volume: Number(event.volume) || 0,
-    description:
-      event.eventMetadata?.context_description?.trim() ||
-      event.description?.trim() ||
-      "",
-    outcomes,
+    title: summary.title,
+    endDate: summary.endDate,
+    icon: summary.icon,
+    volume: summary.volume,
+    description: summary.description,
+    outcomes: summary.outcomes,
   };
 }
 

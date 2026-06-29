@@ -473,6 +473,30 @@
   padding-bottom: 10px;
 }
 
+.markets-section-desc {
+  color: #9ca3af;
+  font-size: 14px;
+  margin: -8px 0 24px 0;
+}
+
+.markets-loading,
+.markets-empty {
+  padding: 40px;
+  text-align: center;
+  color: #9ca3af;
+  border: 1px dashed #1f2937;
+  border-radius: 8px;
+}
+
+.event-card--match {
+  border-color: rgba(255, 193, 69, 0.15);
+}
+
+.event-card--match:hover {
+  border-color: var(--gold, #ffc145);
+  box-shadow: 0 0 0 1px rgba(255, 193, 69, 0.12);
+}
+
 .positions-table {
   width: 100%;
   border-collapse: collapse;
