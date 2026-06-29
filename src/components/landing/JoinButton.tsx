@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+
 interface JoinButtonProps {
   className?: string;
   size?: "md" | "lg";
@@ -9,15 +12,18 @@ export function JoinButton({
   size = "md",
   label = "Join for FREE",
 }: JoinButtonProps) {
+  const { user } = useAuth();
+  const to = user ? "/trade" : "/auth";
+
   return (
-    <a
-      href="#join"
+    <Link
+      to={to}
       className={`join-btn join-btn--${size} ${className}`.trim()}
     >
-      <span className="join-btn__label">{label}</span>
+      <span className="join-btn__label">{user ? "Go to Dashboard" : label}</span>
       <span className="join-btn__arrow" aria-hidden="true">
         →
       </span>
-    </a>
+    </Link>
   );
 }

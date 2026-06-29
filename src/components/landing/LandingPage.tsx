@@ -10,6 +10,8 @@ import { PrizePodium } from "./PrizePodium";
 import { WorldCupHero } from "../WorldCupHero";
 import { WorldCupPredictions } from "../WorldCupPredictions";
 import { Ticker } from "../Ticker";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import {
   EVENT_NAME,
   faqs,
@@ -40,6 +42,8 @@ function SectionHeading({
 }
 
 export function LandingPage() {
+  const { user } = useAuth();
+
   return (
     <div className="landing">
       <header className="landing-nav">
@@ -47,13 +51,29 @@ export function LandingPage() {
           <a className="landing-nav__brand" href="#">
             <BrandLogo className="brand-logo--nav" />
           </a>
-          <nav className="landing-nav__links" aria-label="Page sections">
-            {navLinks.map((link) => (
-              <a key={link.href} className="landing-nav__link" href={link.href}>
-                {link.label}
-              </a>
-            ))}
-          </nav>
+          <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+            <nav className="landing-nav__links" aria-label="Page sections">
+              {navLinks.map((link) => (
+                <a key={link.href} className="landing-nav__link" href={link.href}>
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+            <Link 
+              to={user ? "/trade" : "/auth"} 
+              className="landing-nav__link" 
+              style={{ 
+                border: "1px solid #1f2937", 
+                padding: "6px 16px", 
+                borderRadius: "6px",
+                backgroundColor: "#121824",
+                textDecoration: "none",
+                fontWeight: "600"
+              }}
+            >
+              {user ? "Dashboard" : "Sign In"}
+            </Link>
+          </div>
         </div>
       </header>
 

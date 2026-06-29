@@ -22,7 +22,7 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function buildApiUrl(
+export function buildApiUrl(
   service: "gamma" | "clob",
   path: string,
   params: URLSearchParams,
